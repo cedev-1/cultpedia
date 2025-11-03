@@ -1,9 +1,9 @@
 {
   "schema_version": "qcm/1.0.0",
   "dataset": "general-knowledge",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "created_at": "2025-10-23T22:10:29Z",
-  "updated_at": "2025-11-03T21:59:59.117940629Z",
+  "updated_at": "2025-11-03T22:08:59.993496401Z",
   "includes": [
     "themes",
     "subthemes",
@@ -11,15 +11,15 @@
     "questions"
   ],
   "counts": {
-    "questions": 7,
-    "subthemes": 8,
-    "tags": 13,
-    "themes": 2
+    "questions": 8,
+    "subthemes": 10,
+    "tags": 16,
+    "themes": 3
   },
   "checksums": {
-    "questions.ndjson": "sha256-1966096238912f2d5986d80d3f3c4960fa9222bf93231b917e38b1419f9e11eb",
-    "subthemes.ndjson": "sha256-5c391f5ba95a56fc99f07aca60795626528da1952a3c18f0ca32cadf20702c97",
-    "tags.ndjson": "sha256-fb04b7177a146e03ff19e2f8098bf92472eb7d57c20ea71c6b0437647c3cbda3",
-    "themes.ndjson": "sha256-670f1adbee8f76395f8a3e1cbc7fe2fcf4b9d659c44d86991eddedbe8f857349"
+    "questions.ndjson": "sha256-74a3750a7510e3ba0359a8d96c73dea8b8513b5251e9435603e3ea303bb6dbd0",
+    "subthemes.ndjson": "sha256-0027dcc1b7a2ad2c09272b1aa75729cd3875645f3e8aa9ef6d18d085c6ab662c",
+    "tags.ndjson": "sha256-779919a13475820d9d9687208348aafaf3186ca5fd6e808d7c0956fd6e800267",
+    "themes.ndjson": "sha256-ae420c726a40e5ea000a90b5387124529ffe4b46dc43565e1123eb522c0efda4"
   }
 }
