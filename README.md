@@ -4,6 +4,8 @@
 
 # Cultpedia
 
+Knowledge game distributed server.
+
 Cultpedia is a repository of standardized, multilingual questions for educational platforms. Designed for Culturae, this project provides high-quality, schema-validated questions across various themes.
 
 The Goal of Cultpedia is to offer a centralized question bank that can be easily integrated into different learning management systems (LMS) and quiz applications.
