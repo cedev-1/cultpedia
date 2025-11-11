@@ -9,6 +9,7 @@ on:
 
 jobs:
   sync-and-bump:
+    if: github.repository == 'Culturae-org/cultpedia'
     runs-on: ubuntu-latest
     permissions:
       contents: write
