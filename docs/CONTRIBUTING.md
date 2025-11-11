@@ -91,7 +91,33 @@ When you have create or edit your question in `datasets/new-question.json`, use 
 
 3. **Push to your fork** and **create a Pull Request**.
 
-Sure you have the last version of the main branch before push your changes.
+   Sure you have the last version of the main branch before push your changes.
+
+   After adding the question using the TUI tool, follow these steps:
+
+   1. Create a new branch for your contribution:
+      ```bash
+      git checkout -b add-question-{slug}
+      ```
+      (Replace `{slug}` with the actual slug of your question (or a concise slug version), e.g., `add-question-science-physics-nobel-prize-first-woman-1903`)
+
+   2. Add the updated dataset file:
+      ```bash
+      git add datasets/general-knowledge/questions.ndjson
+      ```
+
+   3. Commit your changes:
+      ```bash
+      git commit -m "feat: add {slug}"
+      ```
+      (Replace `{slug}` with the actual slug of your question or a concise slug version)
+
+   4. Push to your fork:
+      ```bash
+      git push origin add-question-{slug}
+      ```
+
+   5. Create a Pull Request on GitHub from your branch to the main repository.
 
 4. **CI will automatically**:
    - ✓ Validate all questions
