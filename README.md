@@ -77,6 +77,16 @@ Check the [Format](docs/FORMAT.md) to understand the json question structure.
 │   └── question.schema.json    # Question schema
 ```
 
+# Todo
+
+- [x] Cultpedia CLI
+- [x] QCM dataset structure 
+- [x] CI question vadidation
+- [x] CI sync + bump version
+- [ ] Countries data
+- [ ] CLI countries tool
+- [ ] CLI edit tool
+
 ## Support
 
 For questions or support, open an issue on GitHub or contact the Culturae/Cultpedia maintainers.
