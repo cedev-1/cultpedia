@@ -86,6 +86,9 @@ Check the [Format](docs/FORMAT.md) to understand the json question structure.
 - [ ] Countries data
 - [ ] CLI countries tool
 - [ ] CLI edit tool
+- [ ] Branchs by theme
+- [ ] Auto check version
+- [ ] Add true / false questions
 
 ## Support
 
