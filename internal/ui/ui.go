@@ -63,6 +63,21 @@ type helpModel struct {
 	version string
 }
 
+type versionCheckModel struct {
+	version string
+}
+
+type warningModel struct {
+	message string
+	version string
+}
+
+type versionCheckMsg struct {
+	version       string
+	remoteVersion string
+	err           error
+}
+
 type mainMenuModel struct {
 	cursor  int
 	choices []string
@@ -86,7 +101,18 @@ func (m mainMenuModel) Init() tea.Cmd {
 	return nil
 }
 
-func InitialMainModel() mainMenuModel {
+func (m versionCheckModel) Init() tea.Cmd {
+	return func() tea.Msg {
+		remoteVersion, err := actions.GetRemoteVersion()
+		return versionCheckMsg{version: m.version, remoteVersion: remoteVersion, err: err}
+	}
+}
+
+func (m warningModel) Init() tea.Cmd {
+	return nil
+}
+
+func InitialMainModel() versionCheckModel {
 
 	version := "unknown"
 	if data, err := os.ReadFile(utils.ManifestFile); err == nil {
@@ -95,13 +121,7 @@ func InitialMainModel() mainMenuModel {
 			version = manifest.Version
 		}
 	}
-	return mainMenuModel{
-		choices: []string{
-			"Validate new question",
-			"Preview question",
-			"Add question to dataset",
-		},
-		message: "",
+	return versionCheckModel{
 		version: version,
 	}
 }
@@ -310,6 +330,64 @@ Tips:
   • Use slug format: {theme}-{subtheme}-{key}-{detail}`)
 
 	s += "\n\n" + infoStyle.Render("Press any key to close")
+	return s
+}
+
+func (m versionCheckModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case versionCheckMsg:
+		if msg.err != nil || msg.remoteVersion == "" || msg.remoteVersion == msg.version {
+			return mainMenuModel{
+				cursor: 0,
+				choices: []string{
+					"Validate new question",
+					"Preview question",
+					"Add question to dataset",
+				},
+				message: "",
+				version: msg.version,
+			}, nil
+		} else {
+			message := fmt.Sprintf("Your local dataset version (%s) is outdated.\nThe latest version on GitHub is %s.\n\nPlease run 'git pull' to update your local repository before proceeding.\n\nPress Enter to continue anyway (not recommended).", msg.version, msg.remoteVersion)
+			return warningModel{
+				message: message,
+				version: msg.version,
+			}, nil
+		}
+	}
+	return m, nil
+}
+
+func (m versionCheckModel) View() string {
+	return titleStyle.Render("Checking Dataset Version") + "\n\nChecking for updates...\n\n" + infoStyle.Render("Please wait...")
+}
+
+func (m warningModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "q", "esc", keyCtrlC:
+			return m, tea.Quit
+		case keyEnter:
+			return mainMenuModel{
+				cursor: 0,
+				choices: []string{
+					"Validate new question",
+					"Preview question",
+					"Add question to dataset",
+				},
+				message: "",
+				version: m.version,
+			}, nil
+		}
+	}
+	return m, nil
+}
+
+func (m warningModel) View() string {
+	s := titleStyle.Render("Version Mismatch") + "\n\n"
+	s += boxStyle.Render(m.message)
+	s += "\n\n" + infoStyle.Render("Commands: [Enter] Continue Anyway | [Esc/q] Quit")
 	return s
 }
 

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -285,6 +286,30 @@ func calculateSHA256(filePath string) (string, error) {
 
 	hashBytes := hash.Sum(nil)
 	return "sha256-" + hex.EncodeToString(hashBytes), nil
+}
+
+func GetRemoteVersion() (string, error) {
+	resp, err := http.Get("https://raw.githubusercontent.com/Culturae-org/cultpedia/main/datasets/general-knowledge/manifest.json")
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch remote manifest: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("remote manifest not found (status %d)", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response: %v", err)
+	}
+
+	var manifest models.Manifest
+	if err := json.Unmarshal(body, &manifest); err != nil {
+		return "", fmt.Errorf("failed to parse remote manifest: %v", err)
+	}
+
+	return manifest.Version, nil
 }
 
 func calculateEmptySHA256() string {
