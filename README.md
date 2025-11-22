@@ -83,11 +83,11 @@ Check the [Format](docs/FORMAT.md) to understand the json question structure.
 - [x] QCM dataset structure 
 - [x] CI question vadidation
 - [x] CI sync + bump version
+- [x] Auto check version
 - [ ] Countries data
 - [ ] CLI countries tool
 - [ ] CLI edit tool
 - [ ] Branchs by theme
-- [ ] Auto check version
 - [ ] Add true / false questions
 
 ## Support
