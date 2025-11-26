@@ -16,7 +16,7 @@ Each question is a JSON object with the following fields:
 - `subthemes`: Array of objects with `slug` (e.g., `[{"slug": "ancient-history"}]`)
 - `tags`: Array of objects with `slug` (e.g., `[{"slug": "capital-cities"}]`)
 - `qtype`: `"single_choice"` (only supported type for the moment)
-- `difficulty`: `"beginner"`, `"intermediate"`, or `"advanced"`
+- `difficulty`: `"beginner"`, `"intermediate"`, `"advanced"`, or `"pro"`
 - `estimated_seconds`: Number (time to answer, e.g., 20)
 - `points`: Number (scoring weight, e.g., 1.0 - between 0.5 and 5.0)
 - `shuffle_answers`: Boolean (whether to randomize answer order)
