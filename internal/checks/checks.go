@@ -42,9 +42,35 @@ func validateQuestion(q models.Question) error {
 	if q.Slug == "" {
 		return fmt.Errorf("slug is required")
 	}
+	if !isValidSlug(q.Slug) {
+		return fmt.Errorf("slug must be lowercase with hyphens only (got '%s')", q.Slug)
+	}
 	if q.Theme.Slug == "" {
 		return fmt.Errorf("theme.slug is required")
 	}
+
+	validQtypes := []string{"single_choice", "multiple_choice"}
+	if !contains(validQtypes, q.Qtype) {
+		return fmt.Errorf("qtype must be one of: %s (got '%s')", strings.Join(validQtypes, ", "), q.Qtype)
+	}
+
+	validDifficulties := []string{"beginner", "intermediate", "advanced", "pro"}
+	if !contains(validDifficulties, q.Difficulty) {
+		return fmt.Errorf("difficulty must be one of: %s (got '%s')", strings.Join(validDifficulties, ", "), q.Difficulty)
+	}
+
+	if q.Points < 0.5 || q.Points > 5.0 {
+		return fmt.Errorf("points must be between 0.5 and 5.0 (got %.1f)", q.Points)
+	}
+
+	if q.EstimatedSeconds < 5 || q.EstimatedSeconds > 300 {
+		return fmt.Errorf("estimated_seconds must be between 5 and 300 (got %d)", q.EstimatedSeconds)
+	}
+
+	if len(q.Sources) == 0 {
+		return fmt.Errorf("at least one source URL is required")
+	}
+
 	if len(q.Answers) != 4 {
 		return fmt.Errorf("must have exactly 4 answers")
 	}
@@ -72,6 +98,29 @@ func validateQuestion(q models.Question) error {
 		}
 	}
 	return nil
+}
+func isValidSlug(slug string) bool {
+	if slug == "" {
+		return false
+	}
+	for _, c := range slug {
+		if !((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-') {
+			return false
+		}
+	}
+	if slug[0] == '-' || slug[len(slug)-1] == '-' {
+		return false
+	}
+	return true
+}
+
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
 }
 
 func ValidateQuestionStrict(q models.Question) error {
@@ -107,42 +156,6 @@ func ValidateQuestionStrict(q models.Question) error {
 		if len(strings.TrimSpace(content.Explanation)) < minExplanationLength {
 			errors = append(errors, fmt.Sprintf("✗ %s explanation too short (min %d chars, got %d)", lang, minExplanationLength, len(content.Explanation)))
 		}
-	}
-
-	validDifficulties := []string{"beginner", "intermediate", "expert"}
-	difficultyValid := false
-	for _, d := range validDifficulties {
-		if q.Difficulty == d {
-			difficultyValid = true
-			break
-		}
-	}
-	if !difficultyValid {
-		errors = append(errors, fmt.Sprintf("✗ Invalid difficulty '%s' (allowed: beginner, intermediate, expert)", q.Difficulty))
-	}
-
-	if q.Points < 0.5 || q.Points > 5.0 {
-		errors = append(errors, fmt.Sprintf("✗ Points must be between 0.5 and 5.0 (got %.1f)", q.Points))
-	}
-
-	if len(q.Sources) == 0 {
-		errors = append(errors, "✗ At least one source URL is required")
-	}
-
-	validQtypes := []string{"single_choice", "multiple_choice"}
-	qtypeValid := false
-	for _, qt := range validQtypes {
-		if q.Qtype == qt {
-			qtypeValid = true
-			break
-		}
-	}
-	if !qtypeValid {
-		errors = append(errors, fmt.Sprintf("✗ Invalid qtype '%s' (allowed: single_choice, multiple_choice)", q.Qtype))
-	}
-
-	if q.EstimatedSeconds < 5 || q.EstimatedSeconds > 300 {
-		errors = append(errors, fmt.Sprintf("✗ Estimated seconds must be between 5 and 300 (got %d)", q.EstimatedSeconds))
 	}
 
 	if len(errors) > 0 {
