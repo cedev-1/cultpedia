@@ -15,18 +15,33 @@ Each question is a JSON object with the following fields:
 - `theme`: Object with `slug` (e.g., `{"slug": "history"}`)
 - `subthemes`: Array of objects with `slug` (e.g., `[{"slug": "ancient-history"}]`)
 - `tags`: Array of objects with `slug` (e.g., `[{"slug": "capital-cities"}]`)
-- `qtype`: `"single_choice"` (only supported type for the moment)
+- `qtype`: `"single_choice"` or `"true_false"` (see Question Types below)
 - `difficulty`: `"beginner"`, `"intermediate"`, `"advanced"`, or `"pro"`
 - `estimated_seconds`: Number (time to answer, e.g., 20)
 - `points`: Number (scoring weight, e.g., 1.0 - between 0.5 and 5.0)
 - `shuffle_answers`: Boolean (whether to randomize answer order)
 - `i18n`: Object with translations for `fr`, `en`, `es`:
   - Each language has `title`, `stem`, `explanation`
-- `answers`: Array of exactly 4 answer objects:
+- `answers`: Array of answer objects (see Question Types for count requirements):
   - `slug`: Unique answer identifier
   - `is_correct`: Boolean (exactly one `true`)
   - `i18n`: Object with `label` for each language
 - `sources`: Array of URLs (verifiable references)
+
+---
+
+### Question Types
+
+#### Single Choice (`single_choice`)
+Standard multiple choice questions with exactly **4 answers**.
+- One answer must be correct (`is_correct: true`)
+- Answer slugs can be any valid identifier
+
+#### True/False (`true_false`)
+Binary choice questions with exactly **2 answers**.
+- One answer must be correct (`is_correct: true`)
+- Answer slugs must be exactly `"true"` and `"false"`
+- The `shuffle_answers` field is ignored for this type
 
 ---
 

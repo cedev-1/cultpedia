@@ -70,9 +70,14 @@ If you want to use the pre-built binary releases, go to the [Releases page](http
       - **Clone**
       - **Build the tool**
 
-2. **Edit [`datasets/new-question.json`](../datasets/new-question.json)** (only this file have to be modified)
-   - Create your question in this file
-   - follow this [guidelines](../docs/FORMAT.md) for question content
+2. **Choose your question type and edit the appropriate template file:**
+   
+   - **Standard questions (4 choices):** Edit [`datasets/new-question.json`](../datasets/new-question.json)
+   - **True/False questions (2 choices):** Edit [`datasets/new-question-true-false.json`](../datasets/new-question-true-false.json)
+   
+   Guidelines:
+   - Create your question in the chosen template file
+   - Follow this [guidelines](../docs/FORMAT.md) for question content
    - Each line must be valid JSON (JSON format)
    - Use [question.example.json](../schemas/question.example.json) as a template
 

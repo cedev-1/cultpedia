@@ -46,10 +46,11 @@ var boxStyle = lipgloss.NewStyle().
 	MarginBottom(1)
 
 type confirmModel struct {
-	question models.Question
-	cursor   int
-	choices  []string
-	version  string
+	question     models.Question
+	cursor       int
+	choices      []string
+	version      string
+	questionType string
 }
 
 type previewModel struct {
@@ -57,10 +58,12 @@ type previewModel struct {
 	version       string
 	languageIndex int
 	languages     []string
+	questionType  string
 }
 
 type helpModel struct {
-	version string
+	version      string
+	questionType string
 }
 
 type versionCheckModel struct {
@@ -68,8 +71,9 @@ type versionCheckModel struct {
 }
 
 type warningModel struct {
-	message string
-	version string
+	message      string
+	version      string
+	questionType string
 }
 
 type versionCheckMsg struct {
@@ -79,10 +83,11 @@ type versionCheckMsg struct {
 }
 
 type mainMenuModel struct {
-	cursor  int
-	choices []string
-	message string
-	version string
+	cursor       int
+	choices      []string
+	message      string
+	version      string
+	questionType string
 }
 
 func (m confirmModel) Init() tea.Cmd {
@@ -126,6 +131,21 @@ func InitialMainModel() versionCheckModel {
 	}
 }
 
+func newMainMenuModel(version string, questionType string, message string) mainMenuModel {
+	return mainMenuModel{
+		cursor: 0,
+		choices: []string{
+			"Validate new question",
+			"Preview question",
+			"Add question to dataset",
+			"Switch question type",
+		},
+		message:      message,
+		version:      version,
+		questionType: questionType,
+	}
+}
+
 func (m confirmModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
@@ -143,27 +163,9 @@ func (m confirmModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case keyEnter:
 			if m.cursor == 0 {
 				message := actions.AddValidatedQuestion(m.question)
-				return mainMenuModel{
-					cursor: 0,
-					choices: []string{
-						"Validate new question",
-						"Preview question",
-						"Add question to dataset",
-					},
-					message: message,
-					version: m.version,
-				}, nil
+				return newMainMenuModel(m.version, m.questionType, message), nil
 			} else {
-				return mainMenuModel{
-					cursor: 0,
-					choices: []string{
-						"Validate new question",
-						"Preview question",
-						"Add question to dataset",
-					},
-					message: "",
-					version: m.version,
-				}, nil
+				return newMainMenuModel(m.version, m.questionType, ""), nil
 			}
 		}
 	}
@@ -185,16 +187,7 @@ func (m previewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.languageIndex++
 			}
 		case "enter", "esc":
-			return mainMenuModel{
-				cursor: 0,
-				choices: []string{
-					"Validate new question",
-					"Preview question",
-					"Add question to dataset",
-				},
-				message: "",
-				version: m.version,
-			}, nil
+			return newMainMenuModel(m.version, m.questionType, ""), nil
 		}
 	}
 	return m, nil
@@ -293,16 +286,7 @@ func (m helpModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", keyCtrlC:
 			return m, tea.Quit
 		case "enter", "esc":
-			return mainMenuModel{
-				cursor: 0,
-				choices: []string{
-					"Validate new question",
-					"Preview question",
-					"Add question to dataset",
-				},
-				message: "",
-				version: m.version,
-			}, nil
+			return newMainMenuModel(m.version, m.questionType, ""), nil
 		}
 	}
 	return m, nil
@@ -337,21 +321,13 @@ func (m versionCheckModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case versionCheckMsg:
 		if msg.err != nil || msg.remoteVersion == "" || msg.remoteVersion == msg.version {
-			return mainMenuModel{
-				cursor: 0,
-				choices: []string{
-					"Validate new question",
-					"Preview question",
-					"Add question to dataset",
-				},
-				message: "",
-				version: msg.version,
-			}, nil
+			return newMainMenuModel(msg.version, "single_choice", ""), nil
 		} else {
 			message := fmt.Sprintf("Your local dataset version (%s) is outdated.\nThe latest version on GitHub is %s.\n\nPlease run 'git pull' to update your local repository before proceeding.\n\nPress Enter to continue anyway (not recommended).", msg.version, msg.remoteVersion)
 			return warningModel{
-				message: message,
-				version: msg.version,
+				message:      message,
+				version:      msg.version,
+				questionType: "single_choice",
 			}, nil
 		}
 	}
@@ -369,16 +345,7 @@ func (m warningModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "esc", keyCtrlC:
 			return m, tea.Quit
 		case keyEnter:
-			return mainMenuModel{
-				cursor: 0,
-				choices: []string{
-					"Validate new question",
-					"Preview question",
-					"Add question to dataset",
-				},
-				message: "",
-				version: m.version,
-			}, nil
+			return newMainMenuModel(m.version, m.questionType, ""), nil
 		}
 	}
 	return m, nil
@@ -424,6 +391,7 @@ func (m mainMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						languageIndex: 1,
 						languages:     []string{"fr", "en", "es"},
 						version:       m.version,
+						questionType:  m.questionType,
 					}, nil
 				}
 			case 2:
@@ -432,15 +400,24 @@ func (m mainMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.message = err.Error()
 				} else {
 					return confirmModel{
-						question: question,
-						cursor:   0,
-						choices:  []string{"Yes", "No"},
-						version:  m.version,
+						question:     question,
+						cursor:       0,
+						choices:      []string{"Yes", "No"},
+						version:      m.version,
+						questionType: m.questionType,
 					}, nil
+				}
+			case 3:
+				if m.questionType == "single_choice" {
+					m.questionType = "true_false"
+					m.message = "Switched to True/False mode"
+				} else {
+					m.questionType = "single_choice"
+					m.message = "Switched to Single Choice mode"
 				}
 			}
 		case "?":
-			return helpModel{version: m.version}, nil
+			return helpModel{version: m.version, questionType: m.questionType}, nil
 		}
 	}
 	return m, nil
@@ -451,7 +428,13 @@ func (m mainMenuModel) View() string {
 	s := title + "\n"
 
 	versionStr := versionStyle.Render(fmt.Sprintf("Database version: %s", m.version))
-	s += versionStr + "\n\n"
+	s += versionStr + "\n"
+
+	modeDisplay := "single_choice"
+	if m.questionType == "true_false" {
+		modeDisplay = "true_false"
+	}
+	s += infoStyle.Render(fmt.Sprintf("Question mode: %s", modeDisplay)) + "\n\n"
 
 	s += "What would you like to do?\n\n"
 	for i, choice := range m.choices {

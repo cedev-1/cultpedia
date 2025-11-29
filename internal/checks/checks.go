@@ -49,7 +49,7 @@ func validateQuestion(q models.Question) error {
 		return fmt.Errorf("theme.slug is required")
 	}
 
-	validQtypes := []string{"single_choice", "multiple_choice"}
+	validQtypes := []string{"single_choice", "multiple_choice", "true_false"}
 	if !contains(validQtypes, q.Qtype) {
 		return fmt.Errorf("qtype must be one of: %s (got '%s')", strings.Join(validQtypes, ", "), q.Qtype)
 	}
@@ -71,9 +71,28 @@ func validateQuestion(q models.Question) error {
 		return fmt.Errorf("at least one source URL is required")
 	}
 
-	if len(q.Answers) != 4 {
-		return fmt.Errorf("must have exactly 4 answers")
+	if q.Qtype == "true_false" {
+		if len(q.Answers) != 2 {
+			return fmt.Errorf("true_false questions must have exactly 2 answers (got %d)", len(q.Answers))
+		}
+		hasTrue, hasFalse := false, false
+		for _, a := range q.Answers {
+			if a.Slug == "true" {
+				hasTrue = true
+			}
+			if a.Slug == "false" {
+				hasFalse = true
+			}
+		}
+		if !hasTrue || !hasFalse {
+			return fmt.Errorf("true_false questions must have answers with slugs 'true' and 'false'")
+		}
+	} else {
+		if len(q.Answers) != 4 {
+			return fmt.Errorf("must have exactly 4 answers (got %d)", len(q.Answers))
+		}
 	}
+
 	correctCount := 0
 	for _, a := range q.Answers {
 		if a.IsCorrect {
