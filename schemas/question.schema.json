@@ -46,7 +46,7 @@
       }
     },
     "qtype": {
-      "enum": ["single_choice"]
+      "enum": ["single_choice", "true_false"]
     },
     "difficulty": {
       "enum": ["beginner", "intermediate", "advanced"]
@@ -113,7 +113,7 @@
     },
     "answers": {
       "type": "array",
-      "minItems": 4,
+      "minItems": 2,
       "maxItems": 4,
       "items": {
         "type": "object",

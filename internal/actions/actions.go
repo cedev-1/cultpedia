@@ -18,9 +18,14 @@ import (
 )
 
 func ValidateNewQuestion() (models.Question, error) {
-	jsonFilePath := "datasets/new-question.json"
+	jsonFilePath, questionType := utils.DetectModifiedTemplateFile()
+	if jsonFilePath == "" {
+		jsonFilePath = utils.NewQuestionFile
+		questionType = "single_choice"
+	}
+
 	if _, err := os.Stat(jsonFilePath); os.IsNotExist(err) {
-		return models.Question{}, fmt.Errorf("file new-question.json not found")
+		return models.Question{}, fmt.Errorf("file %s not found", jsonFilePath)
 	}
 	data, err := os.ReadFile(jsonFilePath)
 	if err != nil {
@@ -41,9 +46,29 @@ func ValidateNewQuestion() (models.Question, error) {
 	if question.Theme.Slug == "" {
 		return models.Question{}, fmt.Errorf("theme.slug is required")
 	}
-	if len(question.Answers) != 4 {
-		return models.Question{}, fmt.Errorf("must have exactly 4 answers")
+
+	if questionType == "true_false" || question.Qtype == "true_false" {
+		if len(question.Answers) != 2 {
+			return models.Question{}, fmt.Errorf("true_false questions must have exactly 2 answers")
+		}
+		hasTrue, hasFalse := false, false
+		for _, a := range question.Answers {
+			if a.Slug == "true" {
+				hasTrue = true
+			}
+			if a.Slug == "false" {
+				hasFalse = true
+			}
+		}
+		if !hasTrue || !hasFalse {
+			return models.Question{}, fmt.Errorf("true_false questions must have answers with slugs 'true' and 'false'")
+		}
+	} else {
+		if len(question.Answers) != 4 {
+			return models.Question{}, fmt.Errorf("must have exactly 4 answers")
+		}
 	}
+
 	correctCount := 0
 	for _, a := range question.Answers {
 		if a.IsCorrect {

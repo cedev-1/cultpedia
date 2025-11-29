@@ -10,11 +10,13 @@ import (
 )
 
 const (
-	ManifestFile  = "datasets/general-knowledge/manifest.json"
-	QuestionsFile = "datasets/general-knowledge/questions.ndjson"
-	ThemesFile    = "datasets/general-knowledge/themes.ndjson"
-	SubthemesFile = "datasets/general-knowledge/subthemes.ndjson"
-	TagsFile      = "datasets/general-knowledge/tags.ndjson"
+	ManifestFile             = "datasets/general-knowledge/manifest.json"
+	QuestionsFile            = "datasets/general-knowledge/questions.ndjson"
+	ThemesFile               = "datasets/general-knowledge/themes.ndjson"
+	SubthemesFile            = "datasets/general-knowledge/subthemes.ndjson"
+	TagsFile                 = "datasets/general-knowledge/tags.ndjson"
+	NewQuestionFile          = "datasets/new-question.json"
+	NewQuestionTrueFalseFile = "datasets/new-question-true-false.json"
 )
 
 func LoadQuestions() ([]models.Question, error) {
@@ -91,6 +93,28 @@ func SlugExists(slug string) bool {
 		}
 	}
 	return false
+}
+
+func DetectModifiedTemplateFile() (filePath string, questionType string) {
+	if isTemplateModified(NewQuestionFile, "default-question-slug") {
+		return NewQuestionFile, "single_choice"
+	}
+	if isTemplateModified(NewQuestionTrueFalseFile, "default-true-false-question-slug") {
+		return NewQuestionTrueFalseFile, "true_false"
+	}
+	return "", ""
+}
+
+func isTemplateModified(filePath, defaultSlug string) bool {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return false
+	}
+	var q models.Question
+	if err := json.Unmarshal(data, &q); err != nil {
+		return false
+	}
+	return q.Slug != defaultSlug
 }
 
 func PrintHelp() {

@@ -1,0 +1,25 @@
+{
+  "kind": "question",
+  "version": "1.0",
+  "slug": "default-true-false-question-slug",
+  "theme": { "slug": "default-theme" },
+  "subthemes": [ { "slug": "default-subtheme1" }, { "slug": "default-subtheme2" } ],
+  "tags": [ { "slug": "default-tag1" }, { "slug": "default-tag2" } ],
+  "qtype": "true_false",
+  "difficulty": "beginner",
+  "estimated_seconds": 10,
+  "points": 1.0,
+  "shuffle_answers": false,
+  "i18n": {
+    "fr": { "title": "Titre vrai/faux", "stem": "Cette affirmation est-elle vraie ou fausse?", "explanation": "Explication." },
+    "en": { "title": "True/False Title", "stem": "Is this statement true or false?", "explanation": "Explanation." },
+    "es": { "title": "Titulo verdadero/falso", "stem": "Es verdadera o falsa esta afirmacion?", "explanation": "Explicacion." }
+  },
+  "answers": [
+    { "slug": "true", "is_correct": true, "i18n": { "fr": { "label": "Vrai" }, "en": { "label": "True" }, "es": { "label": "Verdadero" } } },
+    { "slug": "false", "is_correct": false, "i18n": { "fr": { "label": "Faux" }, "en": { "label": "False" }, "es": { "label": "Falso" } } }
+  ],
+  "sources": [
+    "https://example.com/default-source"
+  ]
+}
