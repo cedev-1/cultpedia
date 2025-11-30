@@ -1,0 +1,50 @@
+{
+  "schema_version": "reference/1.0.0",
+  "dataset": "geography",
+  "version": "1.0.0",
+  "type": "reference",
+  "license": "CC0-1.0",
+  "created_at": "2025-11-30T00:00:00Z",
+  "updated_at": "2025-11-30T18:18:19.219832Z",
+  "sources": [
+    {
+        "name": "APICountries",
+        "url": "https://www.apicountries.com/",
+        "license": "undefined"
+    },
+    {
+      "name": "REST Countries",
+      "url": "https://restcountries.com",
+      "license": "MPL 2.0"
+    },
+    {
+      "name": "Flag-icons",
+      "url": "https://github.com/lipis/flag-icons",
+      "license": "MIT"
+    },
+    {
+      "name": "Natural Earth",
+      "url": "https://naturalearthdata.com",
+      "license": "Public Domain"
+    }
+  ],
+  "includes": [
+    "countries",
+    "continents",
+    "regions"
+  ],
+  "assets": {
+    "flags-svg": "assets/flags/svg/"
+  },
+  "counts": {
+    "countries": 250,
+    "continents": 6,
+    "regions": 22,
+    "flags": 240
+  },
+  "checksums": {
+    "countries.ndjson": "sha256-6376a2925ac07e80bda9d77eebf21ab57aa48aa19fa5b2fe35db7900c14f774b",
+    "continents.ndjson": "sha256-99f36d985f8d9e36fc8a0b6a6b99856ec1041e83adb067f2ea032165808b78f3",
+    "regions.ndjson": "sha256-83e971c45ede870ca39dff459e1dabf349375a0350397e60c75416b06841805a"
+  }
+}
