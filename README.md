@@ -6,7 +6,7 @@
 
 Knowledge game distributed server.
 
-Cultpedia is a repository of standardized, multilingual questions for educational platforms. Designed for Culturae, this project provides high-quality, schema-validated questions across various themes.
+Cultpedia is a repository of standardized, multilingual questions, and countries data for educational platforms. Designed for Culturae, this project provides high-quality, schema-validated questions across various themes.
 
 The Goal of Cultpedia is to offer a centralized question bank that can be easily integrated into different learning management systems (LMS) and quiz applications.
 
@@ -20,7 +20,7 @@ The Goal of Cultpedia is to offer a centralized question bank that can be easily
 
 ## Features
 
-- **Multilingual Support**: Questions in English, French, and Spanish.
+- **Multilingual Support**: English, French, and Spanish.
 - **Schema Validation**: JSON Schema ensures data integrity.
 - **Versioning**: Automatic versioning with manifest updates.
 - **Interactive CLI**: Go-based tool for adding, validating, and managing questions.
@@ -34,7 +34,7 @@ If you wish to contribute, please refer to the [contributing guide](docs/CONTRIB
 > [!IMPORTANT]
 > For the moment we are accepting contributions only for the "general-knowledge" dataset. Future datasets may be added later.
 
-Check the [Format](docs/FORMAT.md) to understand the json question structure.
+Check the [Format](docs/FORMAT.md) to understand the json question, and countrie structure.
 
 ## Project Structure
 
@@ -44,7 +44,6 @@ Check the [Format](docs/FORMAT.md) to understand the json question structure.
 ├── build.sh                    # Build script for Unix
 ├── cmd/
 │   └── main.go                 # CLI entry point
-├── cultpedia.excalidraw        # Project diagram
 ├── datasets/
 │   ├── general-knowledge/
 │   │   ├── manifest.json       # Metadata and hashes
@@ -52,14 +51,26 @@ Check the [Format](docs/FORMAT.md) to understand the json question structure.
 │   │   ├── subthemes.ndjson    # Subthemes
 │   │   ├── tags.ndjson         # Tags
 │   │   └── themes.ndjson       # Available themes
-│   └── new-question.json       # New question template
+│   ├── new-question.json       # New question template
+│   │
+│   └── geography/
+│       ├── manifest.json       # Metadata and hashes
+│       ├── countries.ndjson    # Main Countries file
+│       ├── continents.ndjson   # Continents file
+│       ├── regions.ndjson      # Regions file
+│       └── assets/
+│           └── flags/
+│               └── svg/        # Country flags (SVG format)
 ├── docs/
 │   ├── CONTRIBUTING.md         # Contribution guidelines
 │   ├── FORMAT.md               # Data format specification
+│   └── MEDIA                   # All Media
+│
 ├── flake.lock                  # Nix lock file
 ├── flake.nix                   # Nix configuration
 ├── go.mod                      # Go module
 ├── go.sum                      # Go sum file
+│
 ├── internal/
 │   ├── actions/
 │   │   └── actions.go          # Actions logic
@@ -71,10 +82,13 @@ Check the [Format](docs/FORMAT.md) to understand the json question structure.
 │   │   └── ui.go               # TUI interface
 │   └── utils/
 │       └── utils.go            # Utilities
+|
 ├── schemas/
 │   ├── manifest.schema.json    # Manifest schema
 │   ├── question.example.json   # Question example
-│   └── question.schema.json    # Question schema
+│   ├── question.schema.json    # Question schema
+│   ├── countrie.example.json   # Country example
+│   └── countrie.schema.json    # Country schema
 ```
 
 # Todo
@@ -84,12 +98,14 @@ Check the [Format](docs/FORMAT.md) to understand the json question structure.
 - [x] CI question vadidation
 - [x] CI sync + bump version
 - [x] Auto check version
-- [ ] Countries data
+- [x] Countries data
+- [x] Add true / false questions
 - [ ] CLI countries tool
 - [ ] CLI edit tool
 - [ ] Branchs by theme
-- [ ] Add true / false questions
+- [ ] Add flags format
+- [ ] More questions !
 
 ## Support
 
-For questions or support, open an issue on GitHub or contact the Culturae/Cultpedia maintainers.
+For questions or support, open an issue on GitHub or contact the Culturae/Cultpedia maintainers or open an issue on GitHub.

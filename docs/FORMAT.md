@@ -1,6 +1,29 @@
 # Data Format Specification
 
-Cultpedia uses a standardized JSON format for questions. Data is stored in Newline-Delimited JSON (NDJSON) files for efficient streaming and version control.
+Cultpedia uses standardized JSON formats for its datasets. Data is stored in Newline-Delimited JSON (NDJSON) files for efficient streaming and version control.
+
+## Table of Contents
+
+- [Questions Dataset](#questions-dataset)
+  - [Question Structure](#question-structure)
+    - [Question Types](#question-types)
+    - [Slug Format](#slug-format)
+  - [NDJSON Files](#ndjson-files)
+  - [Metadata](#metadata)
+- [Geography Dataset](#geography-dataset)
+  - [Country Structure](#country-structure)
+    - [Country Fields](#country-fields)
+  - [Continent Structure](#continent-structure)
+  - [Region Structure](#region-structure)
+  - [Supported Languages](#supported-languages)
+  - [Flag Assets](#flag-assets)
+  - [Data Sources](#data-sources)
+
+---
+
+# Questions Dataset
+
+The `general-knowledge` dataset contains quiz questions and countries data in multiple languages.
 
 ## Question Structure
 
@@ -82,3 +105,94 @@ Automatically generated files:
 
 > [!NOTE]
 > Manifest will be generated automatically by `CI`.
+
+---
+
+# Geography Dataset
+
+The geography dataset is a **reference dataset** (not quiz questions) containing geographic data for map games, flag quizzes, capital quizzes, etc.
+
+## Country Structure
+
+Each country in `countries.ndjson` is a JSON object, follow this to see the schema [countrie.schema](../schemas/countrie.schema.json) or an example [countrie.example](../schemas/countrie.example.json).
+
+### Country Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `kind` | string | Always `"country"` |
+| `version` | string | Version string (e.g., `"1.0"`) |
+| `slug` | string | Unique identifier (ISO 3166-1 alpha-2 code, lowercase) |
+| `iso_alpha2` | string | ISO 3166-1 alpha-2 code (uppercase) |
+| `iso_alpha3` | string | ISO 3166-1 alpha-3 code |
+| `iso_numeric` | string | ISO 3166-1 numeric code |
+| `name` | object | Country name in `en`, `fr`, `es` |
+| `official_name` | object | Official name in `en`, `fr`, `es` |
+| `capital` | object | Capital city in `en`, `fr`, `es` |
+| `continent` | string | Continent ID |
+| `region` | string | Geographic region ID |
+| `coordinates` | object | `lat` and `lng` values |
+| `flag` | string | Flag filename (without extension) |
+| `population` | number | Population count |
+| `area_km2` | number | Area in square kilometers |
+| `currency` | object | `code`, `name`, `symbol` |
+| `languages` | array | ISO 639-1 language codes |
+| `neighbors` | array | Neighboring country IDs (alpha-3 lowercase) |
+| `tld` | string | Top-level domain |
+| `phone_code` | string | International calling code |
+| `driving_side` | string | `"left"` or `"right"` |
+| `un_member` | boolean | UN membership status |
+
+## Continent Structure
+
+```json
+{
+  "id": "europe",
+  "name": {
+    "en": "Europe",
+    "fr": "Europe",
+    "es": "Europa"
+  },
+  "countries": ["ad", "al", "at", "..."],
+  "area_km2": 10180000,
+  "population": 746000000
+}
+```
+
+## Region Structure
+
+```json
+{
+  "id": "western_europe",
+  "name": {
+    "en": "Western Europe",
+    "fr": "Europe de l'Ouest",
+    "es": "Europa Occidental"
+  },
+  "continent": "europe",
+  "countries": ["at", "be", "ch", "de", "fr", "li", "lu", "mc", "nl"]
+}
+```
+
+## Supported Languages
+
+| Code | Language |
+|------|----------|
+| `en` | English (default, used for IDs) |
+| `fr` | French |
+| `es` | Spanish |
+
+## Flag Assets
+
+Flags are stored as SVG files in `assets/flags/svg/` with the country's ISO alpha-2 code as filename:
+
+- `fr.svg` - France
+- `de.svg` - Germany
+- `us.svg` - United States
+
+## Data Sources
+
+- [APICountries](https://www.apicountries.com/) - Country data
+- [REST Countries](https://restcountries.com) - Country data (MPL 2.0)
+- [Flag-icons](https://github.com/lipis/flag-icons) - SVG flags (MIT License)
+- [Natural Earth](https://naturalearthdata.com) - Geographic data (Public Domain)
