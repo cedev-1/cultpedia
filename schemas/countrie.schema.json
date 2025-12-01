@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["kind", "slug", "iso_alpha2", "iso_alpha3", "iso_numeric", "name", "official_name", "capital", "continent", "region", "coordinates", "flag", "population", "area_km2", "currency", "languages", "neighbors", "tld", "phone_code", "driving_side", "un_member"],
+  "properties": {
+    "kind": {
+      "const": "country"
+    },
+    "version": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "iso_alpha2": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 2
+    },
+    "iso_alpha3": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3
+    },
+    "iso_numeric": {
+      "type": "string",
+      "pattern": "^[0-9]{3}$"
+    },
+    "name": {
+      "type": "object",
+      "required": ["en", "fr", "es"],
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "fr": {
+          "type": "string"
+        },
+        "es": {
+          "type": "string"
+        }
+      }
+    },
+    "official_name": {
+      "type": "object",
+      "required": ["en", "fr", "es"],
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "fr": {
+          "type": "string"
+        },
+        "es": {
+          "type": "string"
+        }
+      }
+    },
+    "capital": {
+      "type": "object",
+      "required": ["en", "fr", "es"],
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "fr": {
+          "type": "string"
+        },
+        "es": {
+          "type": "string"
+        }
+      }
+    },
+    "continent": {
+      "type": "string",
+      "enum": ["africa", "americas", "asia", "europe", "oceania", "polar"]
+    },
+    "region": {
+      "type": "string"
+    },
+    "coordinates": {
+      "type": "object",
+      "required": ["lat", "lng"],
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "flag": {
+      "type": "string"
+    },
+    "population": {
+      "type": "number"
+    },
+    "area_km2": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "object",
+      "required": ["code", "name", "symbol"],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "neighbors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tld": {
+      "type": "string"
+    },
+    "phone_code": {
+      "type": "string"
+    },
+    "driving_side": {
+      "type": "string",
+      "enum": ["left", "right"]
+    },
+    "un_member": {
+      "type": "boolean"
+    }
+  }
+}

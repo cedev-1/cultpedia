@@ -1,0 +1,43 @@
+{
+  "kind": "country",
+  "version": "1.0",
+  "slug": "example",
+  "iso_alpha2": "EX",
+  "iso_alpha3": "EXA",
+  "iso_numeric": "001",
+  "name": {
+    "en": "Example Country",
+    "fr": "Pays Exemple",
+    "es": "País Ejemplo"
+  },
+  "official_name": {
+    "en": "Republic of Example",
+    "fr": "République d'Exemple",
+    "es": "República de Ejemplo"
+  },
+  "capital": {
+    "en": "Example City",
+    "fr": "Ville Exemple",
+    "es": "Ciudad Ejemplo"
+  },
+  "continent": "europe",
+  "region": "example_region",
+  "coordinates": {
+    "lat": 50.0,
+    "lng": 10.0
+  },
+  "flag": "ex",
+  "population": 100000,
+  "area_km2": 10000,
+  "currency": {
+    "code": "EXC",
+    "name": "Example Currency",
+    "symbol": "€x"
+  },
+  "languages": ["ex"],
+  "neighbors": ["neigh1", "neigh2"],
+  "tld": ".ex",
+  "phone_code": "+001",
+  "driving_side": "right",
+  "un_member": true
+}
