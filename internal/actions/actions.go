@@ -213,7 +213,17 @@ func BumpVersion() (string, error) {
 		return "", fmt.Errorf("invalid patch version: %v", err)
 	}
 
-	patch++
+	questions := manifest.Counts["questions"]
+	if questions > 0 {
+		if questions%1000 == 0 {
+			minor++
+			patch = 0
+		} else {
+			patch++
+		}
+	} else {
+		patch++
+	}
 	newVersion := fmt.Sprintf("%d.%d.%d", major, minor, patch)
 
 	manifest.Version = newVersion
