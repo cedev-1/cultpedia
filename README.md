@@ -27,6 +27,24 @@ The Goal of Cultpedia is to offer a centralized question bank that can be easily
 - **SHA256 Checksums**: Data integrity verification for imports.
 - **Full compatibility with Culturae**: Seamless integration with the Culturae platform.
 
+## Importing Datasets
+
+To import datasets into Culturae (or any compatible platform).
+
+Culturae use manifest.json files to import datasets with all the needed metadata and sha256 checksums.
+
+### Importing General Knowledge Dataset
+
+```
+https://raw.githubusercontent.com/Culturae-org/cultpedia/refs/heads/main/datasets/general-knowledge/manifest.json
+```
+
+### Importing Geography Dataset
+
+```
+https://raw.githubusercontent.com/Culturae-org/cultpedia/refs/heads/main/datasets/geography/manifest.json
+```
+
 ## Contributing
 
 If you wish to contribute, please refer to the [contributing guide](docs/CONTRIBUTING.md) for detailed instructions on how to add questions.
@@ -35,6 +53,15 @@ If you wish to contribute, please refer to the [contributing guide](docs/CONTRIB
 > For the moment we are accepting contributions only for the "general-knowledge" dataset. Future datasets may be added later.
 
 Check the [Format](docs/FORMAT.md) to understand the json question, and countrie structure.
+
+### Create your own dataset with Cultpedia format.
+
+You can create your own dataset following the Cultpedia format. Use the *cultpedia* CLI to generate the essential files. 
+
+```
+./cultpedia init {dataset-name}
+```
+
 
 ## Project Structure
 
@@ -95,7 +122,7 @@ Check the [Format](docs/FORMAT.md) to understand the json question, and countrie
 
 - [x] Cultpedia CLI
 - [x] QCM dataset structure 
-- [x] CI question vadidation
+- [x] CI question validation
 - [x] CI sync + bump version
 - [x] Auto check version
 - [x] Countries data
@@ -104,7 +131,21 @@ Check the [Format](docs/FORMAT.md) to understand the json question, and countrie
 - [ ] CLI edit tool
 - [ ] Branchs by theme
 - [ ] Add flags format
+- [ ] Contribution cli help
 - [ ] More questions !
+
+Missings svg flags for countries.
+
+- [x] cz : Czech Republic
+- [x] hn : Honduras
+- [ ] io : British Indian Ocean Territory
+- [x] iq : Iraq
+- [x] mm : Myanmar
+- [x] qa : Qatar
+- [x] th : Thailand
+- [x] tw : Taiwan
+- [ ] ws : Samoa
+- [ ] xk : Kosovo
 
 ## Support
 
