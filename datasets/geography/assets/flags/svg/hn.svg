@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="flag-icons-hn" viewBox="0 0 640 480">
+<rect width="640" height="480" style="fill:#0073cf"/>
+<rect width="640" height="160" y="160" style="fill:#fff" />
+<g id="star" transform="translate(320,240) scale(20)" fill="#0073cf">
+<g id="cone">
+<polygon id="triangle" points="0,0 0,1 .5,1" transform="translate(0,-1) rotate(18)"/><use xlink:href="#triangle" transform="scale(-1,1)" id="use12"/>
+</g>
+<use xlink:href="#cone" transform="rotate(72)" id="use14"/>
+<use xlink:href="#cone" transform="rotate(-72)" id="use16"/>
+<use xlink:href="#cone" transform="rotate(144)" id="use18"/>
+<use xlink:href="#cone" transform="rotate(-144)" id="use20"/>
+</g>
+<use xlink:href="#star" transform="translate(88.889,-42.667)"/>
+<use xlink:href="#star" transform="translate(88.889,42.667)"/>
+<use xlink:href="#star" transform="translate(-88.889,-42.667)"/>
+<use xlink:href="#star" transform="translate(-88.889,42.667)"/>
+</svg>

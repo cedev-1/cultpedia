@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="flag-icons-cz" viewBox="0 0 640 480">
+    <rect width="640" height="480" fill="#d7141a"/>
+    <rect width="640" height="240" fill="#fff"/>
+    <path d="M 320,240 0,0 V 480 z" fill="#11457e"/>
+</svg>
