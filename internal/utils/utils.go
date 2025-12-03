@@ -139,7 +139,12 @@ COMMANDS:
 CONTRIBUTION GUIDE:
   For questions: Fork → Edit questions.ndjson → Create PR
   For code: Fork → Edit code → Run tests → Create PR
-  See docs/CONTRIBUTING.md for detailed instructions
+
+For more info, see CONTRIBUTING.md in the docs/ folder.
+Or visit:
+  https://docs.culturae.me/cultpedia/
+
+Thank you for contributing to Cultpedia!
 `
 	fmt.Println(helpText)
 }

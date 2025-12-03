@@ -311,7 +311,14 @@ Tips:
   • Each language needs: title, stem, explanation
   • Minimum text lengths: stem 10 chars, explanation 20 chars
   • Always provide at least 1 source URL
-  • Use slug format: {theme}-{subtheme}-{key}-{detail}`)
+  • Use slug format: {theme}-{subtheme}-{key}-{detail}
+
+For more info, see CONTRIBUTING.md in the docs/ folder.
+Or visit:
+  https://docs.culturae.me/cultpedia/
+
+Thank you for contributing to Cultpedia!
+  `)
 
 	s += "\n\n" + infoStyle.Render("Press any key to close")
 	return s

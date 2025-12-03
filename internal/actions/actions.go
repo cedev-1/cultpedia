@@ -237,6 +237,54 @@ func BumpVersion() (string, error) {
 	return fmt.Sprintf("✔ Version bumped: %s → %s\n✔ Checksums calculated and updated", strings.Join(parts, "."), newVersion), nil
 }
 
+func InitCultpediaDataset(targetDir, datasetName string) (string, error) {
+	if err := os.MkdirAll(targetDir, 0755); err != nil {
+		return "", fmt.Errorf("failed to create directory: %v", err)
+	}
+
+	filesToCreate := []string{
+		"questions.ndjson",
+		"themes.ndjson",
+		"subthemes.ndjson",
+		"tags.ndjson",
+	}
+
+	for _, filename := range filesToCreate {
+		if err := os.WriteFile(fmt.Sprintf("%s/%s", targetDir, filename), []byte{}, 0644); err != nil {
+			return "", fmt.Errorf("failed to create %s: %v", filename, err)
+		}
+	}
+
+	manifest := models.NewQuestionManifest(datasetName)
+	manifest.Counts = map[string]int{
+		"questions": 0,
+		"themes":    0,
+		"subthemes": 0,
+		"tags":      0,
+	}
+	manifest.Checksums = map[string]string{
+		"questions.ndjson": calculateEmptySHA256(),
+		"themes.ndjson":    calculateEmptySHA256(),
+		"subthemes.ndjson": calculateEmptySHA256(),
+		"tags.ndjson":      calculateEmptySHA256(),
+	}
+
+	manifestData, err := json.MarshalIndent(manifest, "", "  ")
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal manifest: %v", err)
+	}
+
+	manifestPath := fmt.Sprintf("%s/manifest.json", targetDir)
+	if err := os.WriteFile(manifestPath, manifestData, 0644); err != nil {
+		return "", fmt.Errorf("failed to write manifest: %v", err)
+	}
+
+	return fmt.Sprintf("✔ Dataset '%s' initialized successfully", manifest.Dataset), nil
+}
+
+// --------------------------------
+// Helper functions
+// --------------------------------
 func writeSlugFile(filePath string, slugs map[string]bool) error {
 	var lines []string
 	for slug := range slugs {
@@ -335,6 +383,18 @@ func GetRemoteVersion() (string, error) {
 	}
 
 	return manifest.Version, nil
+}
+
+func ShowStruct(datasetName string) {
+	helpText := fmt.Sprintf(`
+. %s
+├── questions.ndjson
+├── themes.ndjson
+├── subthemes.ndjson
+├── tags.ndjson
+└── manifest.json
+	`, datasetName)
+	fmt.Println(helpText)
 }
 
 func calculateEmptySHA256() string {

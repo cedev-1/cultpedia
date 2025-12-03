@@ -15,7 +15,7 @@ import (
 
 func main() {
 	if len(os.Args) > 1 {
-		handleCommand(os.Args[1])
+		handleCommand(os.Args[1], os.Args[2:])
 		return
 	}
 	p := tea.NewProgram(ui.InitialMainModel())
@@ -30,7 +30,7 @@ func clearTerminal() {
 	fmt.Print("\033[H\033[2J")
 }
 
-func handleCommand(cmd string) {
+func handleCommand(cmd string, args []string) {
 	switch cmd {
 	case "help", "--help", "-h":
 		utils.PrintHelp()
@@ -83,6 +83,23 @@ func handleCommand(cmd string) {
 			os.Exit(1)
 		}
 		fmt.Println(version)
+	case "init":
+		defaultDir := "new-cultpedia-dataset"
+		datasetName := "new-cultpedia-dataset"
+
+		if len(args) > 0 {
+			defaultDir = args[0]
+			datasetName = args[0]
+		}
+
+		message, err := actions.InitCultpediaDataset(defaultDir, datasetName)
+		if err != nil {
+			fmt.Printf("error: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Println("✔ " + message)
+		actions.ShowStruct(datasetName)
+
 	default:
 		fmt.Printf("unknown command: %s\n", cmd)
 		fmt.Printf("use 'cultpedia help' to see available commands or if you are a contributor, please use the interactive UI with ./cultpedia\n")
