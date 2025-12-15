@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cultpedia Questions Manifest Schema",
+  "description": "JSON Schema for Cultpedia questions dataset manifests",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^qcm/\\d+\\.\\d+\\.\\d+$"
+    },
+    "dataset": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["questions"]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "includes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["questions", "themes", "subthemes", "tags"]
+      }
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "questions": { "type": "integer", "minimum": 0 },
+        "themes": { "type": "integer", "minimum": 0 },
+        "subthemes": { "type": "integer", "minimum": 0 },
+        "tags": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "checksums": {
+      "type": "object",
+      "patternProperties": {
+        ".*\\.ndjson$": {
+          "type": "string",
+          "pattern": "^sha256-[a-f0-9]{64}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["schema_version", "dataset", "type", "version", "created_at", "updated_at", "includes", "counts", "checksums"],
+  "additionalProperties": false
+}

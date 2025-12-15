@@ -111,11 +111,14 @@ You can create your own dataset following the Cultpedia format. Use the *cultped
 │       └── utils.go            # Utilities
 |
 ├── schemas/
-│   ├── manifest.schema.json    # Manifest schema
-│   ├── question.example.json   # Question example
-│   ├── question.schema.json    # Question schema
-│   ├── countrie.example.json   # Country example
-│   └── countrie.schema.json    # Country schema
+│   ├── manifest-geography.example.json  # Geography manifest example
+│   ├── manifest-geography.schema.json   # Geography manifest schema
+│   ├── manifest-questions.example.json  # Questions manifest example
+│   ├── manifest-questions.schema.json   # Questions manifest schema
+│   ├── question.example.json            # Question example
+│   ├── question.schema.json             # Question schema
+│   ├── countrie.example.json            # Country example
+│   └── countrie.schema.json             # Country schema
 ```
 
 # Todo

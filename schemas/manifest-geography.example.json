@@ -1,0 +1,41 @@
+{
+  "schema_version": "reference/1.0.0",
+  "dataset": "my-geography-dataset",
+  "type": "geography",
+  "version": "2.1.0",
+  "license": "MIT",
+  "created_at": "2023-06-10T09:15:00Z",
+  "updated_at": "2024-11-20T16:22:45.678901Z",
+  "sources": [
+    {
+      "name": "Example Source 1",
+      "url": "https://example-source-1.com",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "name": "Example Source 2",
+      "url": "https://example-source-2.org",
+      "license": "Public Domain"
+    }
+  ],
+  "includes": [
+    "countries",
+    "continents",
+    "regions"
+  ],
+  "assets": {
+    "flags-svg": "assets/flags/svg/",
+    "maps": "assets/maps/"
+  },
+  "counts": {
+    "countries": 195,
+    "continents": 7,
+    "regions": 15,
+    "flags": 190
+  },
+  "checksums": {
+    "countries.ndjson": "sha256-1111111111111111111111111111111111111111111111111111111111111111",
+    "continents.ndjson": "sha256-2222222222222222222222222222222222222222222222222222222222222222",
+    "regions.ndjson": "sha256-3333333333333333333333333333333333333333333333333333333333333333"
+  }
+}

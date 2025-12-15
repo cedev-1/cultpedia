@@ -1,9 +1,5 @@
 package models
 
-import (
-	"time"
-)
-
 type Question struct {
 	Kind             string          `json:"kind"`
 	Version          string          `json:"version,omitempty"`
@@ -39,15 +35,4 @@ type Answer struct {
 
 type Label struct {
 	Label string `json:"label"`
-}
-
-type Manifest struct {
-	SchemaVersion string            `json:"schema_version"`
-	Dataset       string            `json:"dataset"`
-	Version       string            `json:"version"`
-	CreatedAt     time.Time         `json:"created_at"`
-	UpdatedAt     time.Time         `json:"updated_at"`
-	Includes      []string          `json:"includes"`
-	Counts        map[string]int    `json:"counts"`
-	Checksums     map[string]string `json:"checksums"`
 }

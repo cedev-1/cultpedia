@@ -1,0 +1,26 @@
+{
+  "schema_version": "qcm/1.0.0",
+  "dataset": "my-questions-dataset",
+  "type": "questions",
+  "version": "1.2.3",
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-12-15T14:45:30.123456Z",
+  "includes": [
+    "themes",
+    "subthemes",
+    "tags",
+    "questions"
+  ],
+  "counts": {
+    "questions": 150,
+    "subthemes": 25,
+    "tags": 50,
+    "themes": 8
+  },
+  "checksums": {
+    "questions.ndjson": "sha256-abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+    "subthemes.ndjson": "sha256-fedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321",
+    "tags.ndjson": "sha256-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+    "themes.ndjson": "sha256-0987654321fedcba0987654321fedcba0987654321fedcba0987654321fedcba"
+  }
+}

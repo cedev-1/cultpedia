@@ -98,6 +98,7 @@ Automatically generated files:
 `manifest.json` contains:
 - Schema version
 - Dataset info
+- Type (e.g., "questions" or "geography" for the moment)
 - Version
 - Export timestamp
 - Counts (e.g., number of questions)
@@ -105,6 +106,8 @@ Automatically generated files:
 
 > [!NOTE]
 > Manifest will be generated automatically by `CI`.
+> JSON Schemas are available at `schemas/manifest-questions.schema.json` and `schemas/manifest-geography.schema.json`.
+> Examples: `schemas/manifest-questions.example.json` and `schemas/manifest-geography.example.json`.
 
 ---
 
