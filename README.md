@@ -56,6 +56,9 @@ Check the [Format](docs/FORMAT.md) to understand the json question, and countrie
 
 ### Create your own dataset with Cultpedia format.
 
+> [!NOTE]
+> Only available for questions datasets (not geography).
+
 You can create your own dataset following the Cultpedia format. Use the *cultpedia* CLI to generate the essential files. 
 
 ```
