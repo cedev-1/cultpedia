@@ -15,7 +15,7 @@ The Goal of Cultpedia is to offer a centralized question bank that can be easily
 - [Project Structure](#project-structure)
 - [Support](#support)
 
-> [!IMPORTANT]
+> [!WARNING]
 > The main Culturae platform is not yet available, but Cultpedia is being developed in parallel to provide ready-to-use content once the platform is live.
 
 ## Features
@@ -29,7 +29,8 @@ The Goal of Cultpedia is to offer a centralized question bank that can be easily
 
 ## Importing Datasets
 
-To import datasets into Culturae (or any compatible platform).
+> [!NOTE]
+> To import datasets into Culturae (or any compatible platform).
 
 Culturae use manifest.json files to import datasets with all the needed metadata and sha256 checksums.
 
