@@ -1,6 +1,4 @@
-<div>
-<img src="docs/Cultpedia-banner.png">
-</div>
+<img width="1200" height="475" alt="Cultpedia-banner" src="https://github.com/user-attachments/assets/9fd8628c-3ad4-4f8b-b396-81c049dbb7e0" />
 
 # Cultpedia
 
