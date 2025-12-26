@@ -152,7 +152,7 @@ Missings svg flags for countries.
 - [x] qa : Qatar
 - [x] th : Thailand
 - [x] tw : Taiwan
-- [ ] ws : Samoa
+- [x] ws : Samoa
 - [x] xk : Kosovo
 
 ## Support
