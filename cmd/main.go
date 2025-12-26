@@ -96,13 +96,13 @@ func handleCommand(cmd string, args []string) {
 	case "check-geography-duplicates":
 		result := checks.CheckGeographyDuplicates()
 		fmt.Println(result)
-		if strings.Contains(result, "✗ Duplicates detected") {
+		if strings.HasPrefix(result, "✗") {
 			os.Exit(1)
 		}
 	case "check-geography-translations":
 		result := checks.CheckGeographyTranslations()
 		fmt.Println(result)
-		if strings.Contains(result, "Missing") {
+		if strings.HasPrefix(result, "✗") {
 			os.Exit(1)
 		}
 	case "bump-geography-version":
