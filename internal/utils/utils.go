@@ -17,6 +17,12 @@ const (
 	TagsFile                 = "datasets/general-knowledge/tags.ndjson"
 	NewQuestionFile          = "datasets/new-question.json"
 	NewQuestionTrueFalseFile = "datasets/new-question-true-false.json"
+
+	GeographyManifestFile  = "datasets/geography/manifest.json"
+	CountriesFile          = "datasets/geography/countries.ndjson"
+	ContinentsFile         = "datasets/geography/continents.ndjson"
+	RegionsFile            = "datasets/geography/regions.ndjson"
+	FlagsSVGDir            = "datasets/geography/assets/flags/svg"
 )
 
 func LoadQuestions() ([]models.Question, error) {
@@ -128,13 +134,24 @@ USAGE FOR MAINTAINERS:
   ./cultpedia [command]
 
 COMMANDS:
-  help                  Show this help message
-  validate              Validate the questions dataset for consistency and correctness
-  check-duplicates      Check for duplicate questions in the dataset
-  check-translations    Check for missing translations in the dataset
-  add                   Add a new question to the dataset via interactive prompts
-  sync-themes           Synchronize themes and subthemes with the questions dataset
-  bump-version          Increment version and update manifest (automated in CI)
+  help                       Show this help message
+  
+  Questions Dataset:
+  validate                      Validate the questions dataset for consistency and correctness
+  check-duplicates              Check for duplicate questions in the dataset
+  check-translations            Check for missing translations in the dataset
+  add                           Add a new question to the dataset via interactive prompts
+  sync-themes                   Synchronize themes and subthemes with the questions dataset
+  bump-version                  Increment version and update manifest (automated in CI)
+  
+  Geography Dataset:
+  validate-geography            Validate the geography dataset (countries, continents, regions)
+  check-geography-duplicates    Check for duplicate entries in geography dataset
+  check-geography-translations  Check for missing translations in geography dataset
+  bump-geography-version        Increment geography version and update checksums (automated in CI)
+  
+  General:
+  init [dataset-name]        Initialize a new Cultpedia dataset structure
 
 CONTRIBUTION GUIDE:
   For questions: Fork → Edit questions.ndjson → Create PR
@@ -147,4 +164,64 @@ Or visit:
 Thank you for contributing to Cultpedia!
 `
 	fmt.Println(helpText)
+}
+
+func LoadCountries() ([]models.Country, error) {
+	data, err := os.ReadFile(CountriesFile)
+	if err != nil {
+		return nil, err
+	}
+	lines := strings.Split(string(data), "\n")
+	var countries []models.Country
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		var c models.Country
+		if err := json.Unmarshal([]byte(line), &c); err != nil {
+			return nil, fmt.Errorf("json parsing error at line %d: %v", len(countries)+1, err)
+		}
+		countries = append(countries, c)
+	}
+	return countries, nil
+}
+
+func LoadContinents() ([]models.Continent, error) {
+	data, err := os.ReadFile(ContinentsFile)
+	if err != nil {
+		return nil, err
+	}
+	lines := strings.Split(string(data), "\n")
+	var continents []models.Continent
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		var c models.Continent
+		if err := json.Unmarshal([]byte(line), &c); err != nil {
+			return nil, fmt.Errorf("json parsing error at line %d: %v", len(continents)+1, err)
+		}
+		continents = append(continents, c)
+	}
+	return continents, nil
+}
+
+func LoadRegions() ([]models.Region, error) {
+	data, err := os.ReadFile(RegionsFile)
+	if err != nil {
+		return nil, err
+	}
+	lines := strings.Split(string(data), "\n")
+	var regions []models.Region
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		var r models.Region
+		if err := json.Unmarshal([]byte(line), &r); err != nil {
+			return nil, fmt.Errorf("json parsing error at line %d: %v", len(regions)+1, err)
+		}
+		regions = append(regions, r)
+	}
+	return regions, nil
 }

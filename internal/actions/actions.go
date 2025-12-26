@@ -247,6 +247,78 @@ func BumpVersion() (string, error) {
 	return fmt.Sprintf("✔ Version bumped: %s → %s\n✔ Checksums calculated and updated", strings.Join(parts, "."), newVersion), nil
 }
 
+func BumpGeographyVersion() (string, error) {
+	data, err := os.ReadFile(utils.GeographyManifestFile)
+	if err != nil {
+		return "", fmt.Errorf("error reading geography manifest: %v", err)
+	}
+
+	var manifest models.GeographyManifest
+	if err := json.Unmarshal(data, &manifest); err != nil {
+		return "", fmt.Errorf("error parsing geography manifest: %v", err)
+	}
+
+	parts := strings.Split(manifest.Version, ".")
+	if len(parts) != 3 {
+		return "", fmt.Errorf("version format invalid: expected major.minor.patch, got %s", manifest.Version)
+	}
+	major, err := strconv.Atoi(parts[0])
+	if err != nil {
+		return "", fmt.Errorf("invalid major version: %v", err)
+	}
+	minor, err := strconv.Atoi(parts[1])
+	if err != nil {
+		return "", fmt.Errorf("invalid minor version: %v", err)
+	}
+	patch, err := strconv.Atoi(parts[2])
+	if err != nil {
+		return "", fmt.Errorf("invalid patch version: %v", err)
+	}
+
+	// Bump patch version
+	patch++
+	newVersion := fmt.Sprintf("%d.%d.%d", major, minor, patch)
+
+	manifest.Version = newVersion
+	manifest.UpdatedAt = time.Now().UTC().Format(time.RFC3339)
+
+	checksums, err := calculateGeographyChecksums()
+	if err != nil {
+		return "", fmt.Errorf("error calculating checksums: %v", err)
+	}
+	manifest.Checksums = checksums
+
+	countries, _ := utils.LoadCountries()
+	continents, _ := utils.LoadContinents()
+	regions, _ := utils.LoadRegions()
+	
+	manifest.Counts["countries"] = len(countries)
+	manifest.Counts["continents"] = len(continents)
+	manifest.Counts["regions"] = len(regions)
+	
+	flagCount := 0
+	if entries, err := os.ReadDir(utils.FlagsSVGDir); err == nil {
+		for _, entry := range entries {
+			if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".svg") {
+				flagCount++
+			}
+		}
+	}
+	manifest.Counts["flags"] = flagCount
+
+	updatedData, err := json.MarshalIndent(manifest, "", "  ")
+	if err != nil {
+		return "", fmt.Errorf("error marshaling manifest: %v", err)
+	}
+
+	if err := os.WriteFile(utils.GeographyManifestFile, updatedData, 0644); err != nil {
+		return "", fmt.Errorf("error writing manifest: %v", err)
+	}
+
+	return fmt.Sprintf("✔ Geography version bumped: %s → %s\n✔ Checksums calculated and updated\n✔ Counts updated: %d countries, %d continents, %d regions, %d flags", 
+		strings.Join(parts, "."), newVersion, len(countries), len(continents), len(regions), flagCount), nil
+}
+
 func InitCultpediaDataset(targetDir, datasetName string) (string, error) {
 	if err := os.MkdirAll(targetDir, 0755); err != nil {
 		return "", fmt.Errorf("failed to create directory: %v", err)
@@ -347,6 +419,30 @@ func calculateChecksums() (map[string]string, error) {
 			}
 		}
 		fileName := strings.TrimPrefix(filePath, "datasets/general-knowledge/")
+		checksums[fileName] = hash
+	}
+
+	return checksums, nil
+}
+
+func calculateGeographyChecksums() (map[string]string, error) {
+	checksums := make(map[string]string)
+	files := []string{
+		utils.CountriesFile,
+		utils.ContinentsFile,
+		utils.RegionsFile,
+	}
+
+	for _, filePath := range files {
+		hash, err := calculateSHA256(filePath)
+		if err != nil {
+			if os.IsNotExist(err) {
+				hash = calculateEmptySHA256()
+			} else {
+				return nil, fmt.Errorf("error calculating hash for %s: %v", filePath, err)
+			}
+		}
+		fileName := strings.TrimPrefix(filePath, "datasets/geography/")
 		checksums[fileName] = hash
 	}
 

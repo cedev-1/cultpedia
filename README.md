@@ -134,9 +134,12 @@ You can create your own dataset following the Cultpedia format. Use the *cultped
 - [x] Add true / false questions
 - [ ] CLI countries tool
 - [ ] CLI edit tool
+- [ ] Geography validator
+- [ ] Exporter (csv for example)
 - [ ] Branchs by theme
 - [ ] Add flags format
 - [ ] Contribution cli help
+- [ ] Contribution Helper
 - [ ] More questions !
 
 Missings svg flags for countries.

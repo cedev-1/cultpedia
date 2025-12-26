@@ -83,6 +83,35 @@ func handleCommand(cmd string, args []string) {
 			os.Exit(1)
 		}
 		fmt.Println(version)
+	case "validate-geography":
+		err := checks.ValidateGeography()
+		if err != nil {
+			fmt.Println("✗ Geography Validation Failed:")
+			fmt.Println()
+			fmt.Println(err)
+			os.Exit(1)
+		} else {
+			fmt.Println("✔ Geography Validation Successful - All data is valid!")
+		}
+	case "check-geography-duplicates":
+		result := checks.CheckGeographyDuplicates()
+		fmt.Println(result)
+		if strings.Contains(result, "detected") {
+			os.Exit(1)
+		}
+	case "check-geography-translations":
+		result := checks.CheckGeographyTranslations()
+		fmt.Println(result)
+		if strings.Contains(result, "Missing") {
+			os.Exit(1)
+		}
+	case "bump-geography-version":
+		version, err := actions.BumpGeographyVersion()
+		if err != nil {
+			fmt.Printf("error: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Println(version)
 	case "init":
 		defaultDir := "new-cultpedia-dataset"
 		datasetName := "new-cultpedia-dataset"

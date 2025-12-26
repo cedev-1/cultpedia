@@ -1,0 +1,65 @@
+name: Sync Geography and Bump Version
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'datasets/geography/countries.ndjson'
+      - 'datasets/geography/continents.ndjson'
+      - 'datasets/geography/regions.ndjson'
+      - 'datasets/geography/assets/flags/svg/**'
+
+jobs:
+  sync-and-bump-geography:
+    if: github.repository == 'Culturae-org/cultpedia'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24'
+
+      - name: Build binaries
+        run: |
+          # Linux
+          GOOS=linux GOARCH=amd64 go build -o cultpedia-linux-amd64 ./cmd
+
+      - name: Run validate-geography
+        run: ./cultpedia-linux-amd64 validate-geography
+
+      - name: Run check-geography-duplicates
+        run: ./cultpedia-linux-amd64 check-geography-duplicates
+
+      - name: Run check-geography-translations
+        run: ./cultpedia-linux-amd64 check-geography-translations
+
+      - name: Bump geography version
+        run: ./cultpedia-linux-amd64 bump-geography-version
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Get new version
+        run: |
+          VERSION=$(jq -r .version datasets/geography/manifest.json)
+          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Commit and push changes
+        run: |
+          git add datasets/geography/manifest.json
+          git commit -m "chore: bump geography version [v${{ env.NEW_VERSION }}]" || echo "No changes to commit"
+          git push

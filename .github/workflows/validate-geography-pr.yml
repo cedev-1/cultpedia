@@ -1,0 +1,67 @@
+name: Validate Geography PR
+
+on:
+  pull_request:
+    paths:
+      - 'datasets/geography/countries.ndjson'
+      - 'datasets/geography/continents.ndjson'
+      - 'datasets/geography/regions.ndjson'
+      - 'datasets/geography/assets/flags/svg/**'
+
+jobs:
+  validate-geography:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24'
+
+      - name: Build binary
+        run: go build -o cultpedia ./cmd
+
+      - name: Run validate-geography
+        run: ./cultpedia validate-geography
+
+      - name: Run check-geography-duplicates
+        run: ./cultpedia check-geography-duplicates
+
+      - name: Run check-geography-translations
+        run: ./cultpedia check-geography-translations
+
+      - name: Add base remote
+        run: git remote add base https://github.com/${{ github.event.pull_request.base.repo.full_name }}.git
+
+      - name: Fetch base branch
+        run: git fetch base ${{ github.base_ref }} --depth=1
+
+      - name: Check for unwanted changes
+        run: |
+          echo "Checking that only geography data files were modified..."
+          MODIFIED_FILES=$(git diff --name-only base/${{ github.base_ref }})
+          echo "Modified files: $MODIFIED_FILES"
+          
+          # Check if manifest.json was modified
+          if echo "$MODIFIED_FILES" | grep -q "datasets/geography/manifest.json"; then
+            echo "Error: manifest.json should not be modified directly"
+            echo "The manifest is automatically updated by CI on merge"
+            exit 1
+          fi
+          
+          # Check if only allowed files were modified
+          ALLOWED_PATTERN="^datasets/geography/(countries|continents|regions)\.ndjson$|^datasets/geography/assets/flags/svg/.*\.svg$"
+          for file in $MODIFIED_FILES; do
+            if ! echo "$file" | grep -qE "$ALLOWED_PATTERN"; then
+              echo "Error: File '$file' is not allowed to be modified in this PR"
+              echo "Only the following files can be modified:"
+              echo "  - datasets/geography/countries.ndjson"
+              echo "  - datasets/geography/continents.ndjson"
+              echo "  - datasets/geography/regions.ndjson"
+              echo "  - datasets/geography/assets/flags/svg/*.svg"
+              exit 1
+            fi
+          done
