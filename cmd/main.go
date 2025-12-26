@@ -96,7 +96,7 @@ func handleCommand(cmd string, args []string) {
 	case "check-geography-duplicates":
 		result := checks.CheckGeographyDuplicates()
 		fmt.Println(result)
-		if strings.Contains(result, "detected") {
+		if strings.Contains(result, "✗ Duplicates detected") {
 			os.Exit(1)
 		}
 	case "check-geography-translations":
