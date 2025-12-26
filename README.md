@@ -153,7 +153,7 @@ Missings svg flags for countries.
 - [x] th : Thailand
 - [x] tw : Taiwan
 - [ ] ws : Samoa
-- [ ] xk : Kosovo
+- [x] xk : Kosovo
 
 ## Support
 
