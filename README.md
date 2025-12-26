@@ -146,7 +146,7 @@ Missings svg flags for countries.
 
 - [x] cz : Czech Republic
 - [x] hn : Honduras
-- [ ] io : British Indian Ocean Territory
+- [x] io : British Indian Ocean Territory
 - [x] iq : Iraq
 - [x] mm : Myanmar
 - [x] qa : Qatar
