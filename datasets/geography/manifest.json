@@ -1,16 +1,16 @@
 {
   "schema_version": "reference/1.0.0",
   "dataset": "geography",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "geography",
   "license": "CC0-1.0",
   "created_at": "2025-11-30T00:00:00Z",
-  "updated_at": "2025-11-30T18:18:19.219832Z",
+  "updated_at": "2025-12-26T18:44:37Z",
   "sources": [
     {
-        "name": "APICountries",
-        "url": "https://www.apicountries.com/",
-        "license": "undefined"
+      "name": "APICountries",
+      "url": "https://www.apicountries.com/",
+      "license": "undefined"
     },
     {
       "name": "REST Countries",
@@ -37,14 +37,14 @@
     "flags-svg": "assets/flags/svg/"
   },
   "counts": {
-    "countries": 250,
     "continents": 6,
-    "regions": 22,
-    "flags": 240
+    "countries": 250,
+    "flags": 250,
+    "regions": 22
   },
   "checksums": {
-    "countries.ndjson": "sha256-6376a2925ac07e80bda9d77eebf21ab57aa48aa19fa5b2fe35db7900c14f774b",
-    "continents.ndjson": "sha256-99f36d985f8d9e36fc8a0b6a6b99856ec1041e83adb067f2ea032165808b78f3",
-    "regions.ndjson": "sha256-83e971c45ede870ca39dff459e1dabf349375a0350397e60c75416b06841805a"
+    "continents.ndjson": "sha256-7eb36aa5d3efcc1831b5693fbe008673c5a705e11289f59132753a389eae3084",
+    "countries.ndjson": "sha256-4fad1d67d09d120a24a662bf316b736af093c83072e025f4b5ef3e4c493ed1fb",
+    "regions.ndjson": "sha256-2fd141fb66451f9504e2d5978a0f4aeb8aca83c381ba35c96258d4ae1ae063e4"
   }
 }
