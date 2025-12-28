@@ -128,6 +128,12 @@ func handleCommand(cmd string, args []string) {
 		}
 		fmt.Println("✔ " + message)
 		actions.ShowStruct(datasetName)
+	case "api":
+		if len(args) > 0 {
+			actions.RunAPIServer(args[0])
+		} else {
+			actions.RunAPIServer("8080")
+		}
 
 	default:
 		fmt.Printf("unknown command: %s\n", cmd)

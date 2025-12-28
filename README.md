@@ -9,6 +9,7 @@ Cultpedia is a repository of standardized, multilingual questions, and countries
 The Goal of Cultpedia is to offer a centralized question bank that can be easily integrated into different learning management systems (LMS) and quiz applications.
 
 - [Features](#features)
+- [API](#api)
 - [Contributing](#contributing)
 - [Project Structure](#project-structure)
 - [Support](#support)
@@ -43,6 +44,22 @@ https://raw.githubusercontent.com/Culturae-org/cultpedia/refs/heads/main/dataset
 ```
 https://raw.githubusercontent.com/Culturae-org/cultpedia/refs/heads/main/datasets/geography/manifest.json
 ```
+
+## API
+
+Cultpedia provides a REST API to access all datasets programmatically.
+
+API is available at [api.culturae.me](https://api.culturae.me).
+
+**Available endpoints:**
+- `GET /api/` - API information and stats
+- `GET /api/questions` - All questions
+- `GET /api/geography/countries` - All countries
+- `GET /api/geography/regions` - All regions
+- `GET /api/geography/continents` - All continents
+- `GET /api/geography/flags/{code}` - Country flag SVG
+
+**[Full API Documentation](docs/API.md)**
 
 ## Contributing
 
