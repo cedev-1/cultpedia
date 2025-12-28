@@ -175,3 +175,7 @@ Missings svg flags for countries.
 ## Support
 
 For questions or support, open an issue on GitHub or contact the Culturae/Cultpedia maintainers or open an issue on GitHub.
+
+## License
+
+[MIT LICENSE](./LICENSE)
