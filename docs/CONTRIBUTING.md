@@ -18,9 +18,11 @@ By participating, you agree to maintain a respectful and inclusive environment. 
 You have to **Fork the repository** on GitHub and clone your fork into your local machine.
 
    ```bash
-   git clone https://github.com/Culturae-org/cultpedia.git
+   git clone https://github.com/YOUR_USERNAME/cultpedia.git
    cd cultpedia
    ```
+
+   Replace `YOUR_USERNAME` with your GitHub username.
 
 ### Build the cultpedia tool
 
