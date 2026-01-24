@@ -58,8 +58,28 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-      - name: Commit and push changes
+      - name: Create branch and push changes
         run: |
+          BRANCH_NAME="sync-bot/update-v${{ env.NEW_VERSION }}"
+          git checkout -b "$BRANCH_NAME"
           git add datasets/general-knowledge/manifest.json datasets/general-knowledge/themes.ndjson datasets/general-knowledge/subthemes.ndjson datasets/general-knowledge/tags.ndjson
-          git commit -m "chore: sync themes and bump version [v${{ env.NEW_VERSION }}]" || echo "No changes to commit"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            echo "HAS_CHANGES=false" >> $GITHUB_ENV
+          else
+            git commit -m "chore: sync themes and bump version [v${{ env.NEW_VERSION }}]"
+            git push -u origin "$BRANCH_NAME"
+            echo "HAS_CHANGES=true" >> $GITHUB_ENV
+            echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          fi
+
+      - name: Create Pull Request
+        if: env.HAS_CHANGES == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "${{ env.BRANCH_NAME }}" \
+            --title "chore: sync themes and bump version [v${{ env.NEW_VERSION }}]" \
+            --body "Automated sync of themes and version bump to v${{ env.NEW_VERSION }}"
