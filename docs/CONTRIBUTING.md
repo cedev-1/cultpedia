@@ -106,7 +106,7 @@ Your question must respect these constraints:
 |-------|------------|
 | `slug` | Lowercase letters, numbers, and hyphens only. No leading/trailing hyphens. Must be unique. |
 | `points` | Between 0.5 and 5.0 |
-| `estimated_seconds` | Between 5 and 300 |
+| `estimated_seconds` | Between 5 and 30 |
 | `answers` | Exactly 4 for `single_choice`, exactly 2 for `true_false` |
 | `sources` | At least one URL required |
 

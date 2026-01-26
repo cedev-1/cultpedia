@@ -2,6 +2,7 @@ package checks
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 
 	"cultpedia/internal/models"
@@ -63,12 +64,18 @@ func validateQuestion(q models.Question) error {
 		return fmt.Errorf("points must be between 0.5 and 5.0 (got %.1f)", q.Points)
 	}
 
-	if q.EstimatedSeconds < 5 || q.EstimatedSeconds > 30 {
-		return fmt.Errorf("estimated_seconds must be between 5 and 30 (got %d)", q.EstimatedSeconds)
+	if q.EstimatedSeconds < 5 || q.EstimatedSeconds > 300 {
+		return fmt.Errorf("estimated_seconds must be between 5 and 300 (got %d)", q.EstimatedSeconds)
 	}
 
 	if len(q.Sources) == 0 {
 		return fmt.Errorf("at least one source URL is required")
+	}
+
+	for i, source := range q.Sources {
+		if err := validateURL(source); err != nil {
+			return fmt.Errorf("invalid source URL #%d (%s): %v", i+1, source, err)
+		}
 	}
 
 	if q.Qtype == "true_false" {
@@ -143,6 +150,27 @@ func contains(slice []string, item string) bool {
 		}
 	}
 	return false
+}
+
+func validateURL(rawURL string) error {
+	if rawURL == "" {
+		return fmt.Errorf("URL cannot be empty")
+	}
+
+	parsed, err := url.Parse(rawURL)
+	if err != nil {
+		return fmt.Errorf("invalid URL format")
+	}
+
+	if parsed.Scheme != "http" && parsed.Scheme != "https" {
+		return fmt.Errorf("URL must use http or https scheme")
+	}
+
+	if parsed.Host == "" {
+		return fmt.Errorf("URL must have a host")
+	}
+
+	return nil
 }
 
 func ValidateQuestionStrict(q models.Question) error {

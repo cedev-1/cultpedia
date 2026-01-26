@@ -18,10 +18,25 @@ import (
 )
 
 func ValidateNewQuestion() (models.Question, error) {
-	jsonFilePath, questionType := utils.DetectModifiedTemplateFile()
-	if jsonFilePath == "" {
+	return ValidateNewQuestionWithType("")
+}
+
+func ValidateNewQuestionWithType(forceType string) (models.Question, error) {
+	var jsonFilePath string
+	var questionType string
+
+	if forceType == "true_false" {
+		jsonFilePath = utils.NewQuestionTrueFalseFile
+		questionType = "true_false"
+	} else if forceType == "single_choice" {
 		jsonFilePath = utils.NewQuestionFile
 		questionType = "single_choice"
+	} else {
+		jsonFilePath, questionType = utils.DetectModifiedTemplateFile()
+		if jsonFilePath == "" {
+			jsonFilePath = utils.NewQuestionFile
+			questionType = "single_choice"
+		}
 	}
 
 	if _, err := os.Stat(jsonFilePath); os.IsNotExist(err) {
@@ -291,11 +306,11 @@ func BumpGeographyVersion() (string, error) {
 	countries, _ := utils.LoadCountries()
 	continents, _ := utils.LoadContinents()
 	regions, _ := utils.LoadRegions()
-	
+
 	manifest.Counts["countries"] = len(countries)
 	manifest.Counts["continents"] = len(continents)
 	manifest.Counts["regions"] = len(regions)
-	
+
 	flagCount := 0
 	if entries, err := os.ReadDir(utils.FlagsSVGDir); err == nil {
 		for _, entry := range entries {
@@ -315,7 +330,7 @@ func BumpGeographyVersion() (string, error) {
 		return "", fmt.Errorf("error writing manifest: %v", err)
 	}
 
-	return fmt.Sprintf("✔ Geography version bumped: %s → %s\n✔ Checksums calculated and updated\n✔ Counts updated: %d countries, %d continents, %d regions, %d flags", 
+	return fmt.Sprintf("✔ Geography version bumped: %s → %s\n✔ Checksums calculated and updated\n✔ Counts updated: %d countries, %d continents, %d regions, %d flags",
 		strings.Join(parts, "."), newVersion, len(countries), len(continents), len(regions), flagCount), nil
 }
 
@@ -505,4 +520,91 @@ func ShowStruct(datasetName string) {
 
 func calculateEmptySHA256() string {
 	return "sha256-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
+
+func ResetTemplate(questionType string) error {
+	if questionType == "true_false" {
+		return resetTrueFalseTemplate()
+	}
+	return resetSingleChoiceTemplate()
+}
+
+func resetSingleChoiceTemplate() error {
+	template := `{
+  "kind": "question",
+  "version": "1.0",
+  "slug": "default-question-slug",
+  "theme": { "slug": "default-theme" },
+  "subthemes": [ { "slug": "default-subtheme1" }, { "slug": "default-subtheme2" } ],
+  "tags": [ { "slug": "default-tag1" }, { "slug": "default-tag2" } ],
+  "qtype": "single_choice",
+  "difficulty": "beginner",
+  "estimated_seconds": 15,
+  "points": 1.0,
+  "shuffle_answers": true,
+  "i18n": {
+    "fr": { "title": "Titre par défaut", "stem": "Question par défaut ?", "explanation": "Explication par défaut." },
+    "en": { "title": "Default Title", "stem": "Default question?", "explanation": "Default explanation." },
+    "es": { "title": "Título por defecto", "stem": "¿Pregunta por defecto?", "explanation": "Explicación por defecto." }
+  },
+  "answers": [
+    { "slug": "default-answer1", "is_correct": true,  "i18n": { "fr": { "label": "Réponse 1" }, "en": { "label": "Answer 1" }, "es": { "label": "Respuesta 1" } } },
+    { "slug": "default-answer2", "is_correct": false, "i18n": { "fr": { "label": "Réponse 2" }, "en": { "label": "Answer 2" }, "es": { "label": "Respuesta 2" } } },
+    { "slug": "default-answer3", "is_correct": false, "i18n": { "fr": { "label": "Réponse 3" }, "en": { "label": "Answer 3" }, "es": { "label": "Respuesta 3" } } },
+    { "slug": "default-answer4", "is_correct": false, "i18n": { "fr": { "label": "Réponse 4" }, "en": { "label": "Answer 4" }, "es": { "label": "Respuesta 4" } } }
+  ],
+  "sources": [
+    "https://example.com/default-source"
+  ]
+}
+`
+	return os.WriteFile(utils.NewQuestionFile, []byte(template), 0644)
+}
+
+func resetTrueFalseTemplate() error {
+	template := `{
+  "kind": "question",
+  "version": "1.0",
+  "slug": "default-true-false-question-slug",
+  "theme": { "slug": "default-theme" },
+  "subthemes": [ { "slug": "default-subtheme1" }, { "slug": "default-subtheme2" } ],
+  "tags": [ { "slug": "default-tag1" }, { "slug": "default-tag2" } ],
+  "qtype": "true_false",
+  "difficulty": "beginner",
+  "estimated_seconds": 10,
+  "points": 1.0,
+  "shuffle_answers": false,
+  "i18n": {
+    "fr": { "title": "Titre vrai/faux", "stem": "Cette affirmation est-elle vraie ou fausse?", "explanation": "Explication par défaut à remplacer par votre explication détaillée." },
+    "en": { "title": "True/False Title", "stem": "Is this statement true or false?", "explanation": "Default explanation to replace with your detailed explanation." },
+    "es": { "title": "Titulo verdadero/falso", "stem": "Es verdadera o falsa esta afirmacion?", "explanation": "Explicación por defecto a reemplazar con su explicación detallada." }
+  },
+  "answers": [
+    { "slug": "true", "is_correct": true, "i18n": { "fr": { "label": "Vrai" }, "en": { "label": "True" }, "es": { "label": "Verdadero" } } },
+    { "slug": "false", "is_correct": false, "i18n": { "fr": { "label": "Faux" }, "en": { "label": "False" }, "es": { "label": "Falso" } } }
+  ],
+  "sources": [
+    "https://example.com/default-source"
+  ]
+}
+`
+	return os.WriteFile(utils.NewQuestionTrueFalseFile, []byte(template), 0644)
+}
+
+func GetAvailableThemes() ([]string, error) {
+	questions, err := utils.LoadQuestions()
+	if err != nil {
+		return nil, err
+	}
+
+	themeSlugs := make(map[string]bool)
+	for _, q := range questions {
+		themeSlugs[q.Theme.Slug] = true
+	}
+
+	themes := make([]string, 0, len(themeSlugs))
+	for slug := range themeSlugs {
+		themes = append(themes, slug)
+	}
+	return themes, nil
 }

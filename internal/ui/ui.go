@@ -167,6 +167,12 @@ func (m confirmModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case keyEnter:
 			if m.cursor == 0 {
 				message := actions.AddValidatedQuestion(m.question)
+				// Reset template after successful add
+				if !strings.Contains(message, "error") {
+					if err := actions.ResetTemplate(m.questionType); err == nil {
+						message += "\n\n✔ Template file has been reset for your next question."
+					}
+				}
 				return newMainMenuModel(m.version, m.questionType, message), nil
 			} else {
 				return newMainMenuModel(m.version, m.questionType, ""), nil
@@ -299,7 +305,12 @@ func (m helpModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m helpModel) View() string {
 	s := titleStyle.Render("Help") + "\n\n"
 
-	s += boxStyle.Render(`Navigation:
+	themesStr := "science, history, geography, sports, gaming"
+	if themes, err := actions.GetAvailableThemes(); err == nil && len(themes) > 0 {
+		themesStr = strings.Join(themes, ", ")
+	}
+
+	helpContent := fmt.Sprintf(`Navigation:
   ↑/↓ or k/j              Move up/down in menus
   ←/→ or h/l              Switch languages (in preview)
   Enter                   Confirm selection
@@ -309,8 +320,11 @@ Actions:
   ?                       Show this help
   q / Ctrl+C              Exit (from main menu)
 
+Available Themes:
+  %s
+
 Tips:
-  • Only modify questions.ndjson in your PR
+  • Edit the template file matching your question type
   • All 3 languages required: fr, en, es
   • Each language needs: title, stem, explanation
   • Minimum text lengths: stem 10 chars, explanation 20 chars
@@ -321,8 +335,9 @@ For more info, see CONTRIBUTING.md in the docs/ folder.
 Or visit:
   https://docs.culturae.me/cultpedia/
 
-Thank you for contributing to Cultpedia!
-  `)
+Thank you for contributing to Cultpedia!`, themesStr)
+
+	s += boxStyle.Render(helpContent)
 
 	s += "\n\n" + infoStyle.Render("Press any key to close")
 	return s
@@ -386,14 +401,14 @@ func (m mainMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case keyEnter:
 			switch m.cursor {
 			case 0:
-				_, err := actions.ValidateNewQuestion()
+				_, err := actions.ValidateNewQuestionWithType(m.questionType)
 				if err != nil {
 					m.message = err.Error()
 				} else {
 					m.message = successStyle.Render("✔ New question is valid!")
 				}
 			case 1:
-				question, err := actions.ValidateNewQuestion()
+				question, err := actions.ValidateNewQuestionWithType(m.questionType)
 				if err != nil {
 					m.message = err.Error()
 				} else {
@@ -406,7 +421,7 @@ func (m mainMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					}, nil
 				}
 			case 2:
-				question, err := actions.ValidateNewQuestion()
+				question, err := actions.ValidateNewQuestionWithType(m.questionType)
 				if err != nil {
 					m.message = err.Error()
 				} else {
@@ -421,10 +436,10 @@ func (m mainMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case 3:
 				if m.questionType == qtypeSingleChoice {
 					m.questionType = qtypeTrueFalse
-					m.message = "Switched to True/False mode"
+					m.message = "Switched to True/False mode\nEdit: datasets/new-question-true-false.json"
 				} else {
 					m.questionType = qtypeSingleChoice
-					m.message = "Switched to Single Choice mode"
+					m.message = "Switched to Single Choice mode\nEdit: datasets/new-question.json"
 				}
 			}
 		case "?":
@@ -442,10 +457,12 @@ func (m mainMenuModel) View() string {
 	s += versionStr + "\n"
 
 	modeDisplay := qtypeSingleChoice
+	templateFile := "datasets/new-question.json"
 	if m.questionType == qtypeTrueFalse {
 		modeDisplay = qtypeTrueFalse
+		templateFile = "datasets/new-question-true-false.json"
 	}
-	s += infoStyle.Render(fmt.Sprintf("Question mode: %s", modeDisplay)) + "\n\n"
+	s += infoStyle.Render(fmt.Sprintf("Mode: %s | Template: %s", modeDisplay, templateFile)) + "\n\n"
 
 	s += "What would you like to do?\n\n"
 	for i, choice := range m.choices {

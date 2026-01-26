@@ -1,8 +1,8 @@
 package actions
 
 import (
-	"bufio"
 	"cultpedia/internal/models"
+	"cultpedia/internal/utils"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -10,27 +10,43 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 var apiData models.APIData
 
+const defaultPort = "8080"
+
 func RunAPIServer(serverPort ...string) {
+	port := defaultPort
+	if len(serverPort) > 0 && serverPort[0] != "" {
+		port = serverPort[0]
+	}
 
 	if err := loadData(); err != nil {
 		log.Fatalf("Error loading data: %v", err)
 	}
 
-	http.HandleFunc("/api/questions", handleQuestions)
-	http.HandleFunc("/api/geography/countries", handleCountries)
-	http.HandleFunc("/api/geography/regions", handleRegions)
-	http.HandleFunc("/api/geography/continents", handleContinents)
-	http.HandleFunc("/api/geography/flags/", handleFlags)
-	http.HandleFunc("/api/", handleRoot)
-	http.HandleFunc("/", handleRoot)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/questions", handleQuestions)
+	mux.HandleFunc("/api/geography/countries", handleCountries)
+	mux.HandleFunc("/api/geography/regions", handleRegions)
+	mux.HandleFunc("/api/geography/continents", handleContinents)
+	mux.HandleFunc("/api/geography/flags/", handleFlags)
+	mux.HandleFunc("/api/", handleRoot)
+	mux.HandleFunc("/", handleRoot)
 
-	fmt.Printf("Cultpedia API server running on http://localhost:%s\n", serverPort[0])
+	server := &http.Server{
+		Addr:         ":" + port,
+		Handler:      mux,
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
 
-	if err := http.ListenAndServe(":"+serverPort[0], nil); err != nil {
+	fmt.Printf("Cultpedia API server running on http://localhost:%s\n", port)
+
+	if err := server.ListenAndServe(); err != nil {
 		log.Fatalf("Server error: %v", err)
 	}
 }
@@ -42,22 +58,22 @@ func loadData() error {
 		return fmt.Errorf("error loading manifests: %w", err)
 	}
 
-	apiData.Questions, err = loadQuestions()
+	apiData.Questions, err = utils.LoadQuestions()
 	if err != nil {
 		return fmt.Errorf("error loading questions: %w", err)
 	}
 
-	apiData.Countries, err = loadCountries()
+	apiData.Countries, err = utils.LoadCountries()
 	if err != nil {
 		return fmt.Errorf("error loading countries: %w", err)
 	}
 
-	apiData.Regions, err = loadRegions()
+	apiData.Regions, err = utils.LoadRegions()
 	if err != nil {
 		return fmt.Errorf("error loading regions: %w", err)
 	}
 
-	apiData.Continents, err = loadContinents()
+	apiData.Continents, err = utils.LoadContinents()
 	if err != nil {
 		return fmt.Errorf("error loading continents: %w", err)
 	}
@@ -66,7 +82,7 @@ func loadData() error {
 }
 
 func loadManifests() error {
-	geoFile, err := os.Open("datasets/geography/manifest.json")
+	geoFile, err := os.Open(utils.GeographyManifestFile)
 	if err != nil {
 		return err
 	}
@@ -84,7 +100,7 @@ func loadManifests() error {
 		UpdatedAt: geoManifest.UpdatedAt,
 	}
 
-	qFile, err := os.Open("datasets/general-knowledge/manifest.json")
+	qFile, err := os.Open(utils.ManifestFile)
 	if err != nil {
 		return err
 	}
@@ -105,90 +121,10 @@ func loadManifests() error {
 	return nil
 }
 
-func loadQuestions() ([]models.Question, error) {
-	file, err := os.Open("datasets/general-knowledge/questions.ndjson")
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = file.Close() }()
-
-	var questions []models.Question
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		var q models.Question
-		if err := json.Unmarshal(scanner.Bytes(), &q); err != nil {
-			return nil, err
-		}
-		questions = append(questions, q)
-	}
-
-	return questions, scanner.Err()
-}
-
-func loadCountries() ([]models.Country, error) {
-	file, err := os.Open("datasets/geography/countries.ndjson")
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = file.Close() }()
-
-	var countries []models.Country
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		var c models.Country
-		if err := json.Unmarshal(scanner.Bytes(), &c); err != nil {
-			return nil, err
-		}
-		countries = append(countries, c)
-	}
-
-	return countries, scanner.Err()
-}
-
-func loadRegions() ([]models.Region, error) {
-	file, err := os.Open("datasets/geography/regions.ndjson")
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = file.Close() }()
-
-	var regions []models.Region
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		var r models.Region
-		if err := json.Unmarshal(scanner.Bytes(), &r); err != nil {
-			return nil, err
-		}
-		regions = append(regions, r)
-	}
-
-	return regions, scanner.Err()
-}
-
-func loadContinents() ([]models.Continent, error) {
-	file, err := os.Open("datasets/geography/continents.ndjson")
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = file.Close() }()
-
-	var continents []models.Continent
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		var c models.Continent
-		if err := json.Unmarshal(scanner.Bytes(), &c); err != nil {
-			return nil, err
-		}
-		continents = append(continents, c)
-	}
-
-	return continents, scanner.Err()
-}
-
 func handleRoot(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	
+
 	response := models.APIRootResponse{
 		Name:        "Cultpedia API",
 		Version:     "1.0",
@@ -237,7 +173,7 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 			"continents": len(apiData.Continents),
 		},
 	}
-	
+
 	_ = json.NewEncoder(w).Encode(response)
 }
 
@@ -280,13 +216,19 @@ func handleContinents(w http.ResponseWriter, r *http.Request) {
 func handleFlags(w http.ResponseWriter, r *http.Request) {
 	code := strings.TrimPrefix(r.URL.Path, "/api/geography/flags/")
 	code = strings.TrimSuffix(code, ".svg")
+	code = strings.ToLower(code)
 
 	if code == "" {
 		http.Error(w, "Country code required", http.StatusBadRequest)
 		return
 	}
 
-	flagPath := filepath.Join("datasets", "geography", "assets", "flags", "svg", code+".svg")
+	if len(code) != 2 || !isAlphaOnly(code) {
+		http.Error(w, "Invalid country code format", http.StatusBadRequest)
+		return
+	}
+
+	flagPath := filepath.Join(utils.FlagsSVGDir, code+".svg")
 
 	if _, err := os.Stat(flagPath); os.IsNotExist(err) {
 		http.Error(w, "Flag not found", http.StatusNotFound)
@@ -296,4 +238,13 @@ func handleFlags(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/svg+xml")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	http.ServeFile(w, r, flagPath)
+}
+
+func isAlphaOnly(s string) bool {
+	for _, c := range s {
+		if c < 'a' || c > 'z' {
+			return false
+		}
+	}
+	return true
 }
