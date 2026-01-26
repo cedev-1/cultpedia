@@ -11,9 +11,9 @@
   "points": 1.0,
   "shuffle_answers": false,
   "i18n": {
-    "fr": { "title": "Titre vrai/faux", "stem": "Cette affirmation est-elle vraie ou fausse?", "explanation": "Explication." },
-    "en": { "title": "True/False Title", "stem": "Is this statement true or false?", "explanation": "Explanation." },
-    "es": { "title": "Titulo verdadero/falso", "stem": "Es verdadera o falsa esta afirmacion?", "explanation": "Explicacion." }
+    "fr": { "title": "Titre vrai/faux", "stem": "Cette affirmation est-elle vraie ou fausse?", "explanation": "Explication par défaut à remplacer par votre explication détaillée." },
+    "en": { "title": "True/False Title", "stem": "Is this statement true or false?", "explanation": "Default explanation to replace with your detailed explanation." },
+    "es": { "title": "Titulo verdadero/falso", "stem": "Es verdadera o falsa esta afirmacion?", "explanation": "Explicación por defecto a reemplazar con su explicación detallada." }
   },
   "answers": [
     { "slug": "true", "is_correct": true, "i18n": { "fr": { "label": "Vrai" }, "en": { "label": "True" }, "es": { "label": "Verdadero" } } },

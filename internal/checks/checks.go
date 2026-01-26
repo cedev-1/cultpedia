@@ -49,7 +49,7 @@ func validateQuestion(q models.Question) error {
 		return fmt.Errorf("theme.slug is required")
 	}
 
-	validQtypes := []string{"single_choice", "multiple_choice", "true_false"}
+	validQtypes := []string{"single_choice", "true_false"}
 	if !contains(validQtypes, q.Qtype) {
 		return fmt.Errorf("qtype must be one of: %s (got '%s')", strings.Join(validQtypes, ", "), q.Qtype)
 	}

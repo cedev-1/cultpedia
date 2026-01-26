@@ -34,12 +34,12 @@ The API will be available at `http://localhost:8080`
 **Build and run:**
 ```bash
 docker build -t cultpedia-api .
-docker run -p 8080:8080 cultpedia-api -d
+docker run -d -p 8080:8080 cultpedia-api
 ```
 
 **Stop the container:**
 ```bash
-docker-compose down
+docker stop $(docker ps -q --filter ancestor=cultpedia-api)
 ```
 
 ---

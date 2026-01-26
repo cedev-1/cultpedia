@@ -154,7 +154,7 @@ COMMANDS:
   init [dataset-name]        Initialize a new Cultpedia dataset structure
 
 CONTRIBUTION GUIDE:
-  For questions: Fork → Edit questions.ndjson → Create PR
+  For questions: Fork → Edit template file → Use TUI to add → Create PR
   For code: Fork → Edit code → Run tests → Create PR
 
 For more info, see CONTRIBUTING.md in the docs/ folder.
