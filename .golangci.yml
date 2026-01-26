@@ -15,12 +15,12 @@ linters:
     - bodyclose
     - rowserrcheck
 
-linters-settings:
+settings:
   govet:
     check-shadowing: true
 
 issues:
-  exclude:
+  exclude-rules:
     - path: _test\.go
       linters:
         - gosec
