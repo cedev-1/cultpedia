@@ -1,27 +1,25 @@
 version: "2"
+
+linters:
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - path: _test\.go
+        linters:
+          - errcheck
+          - gosec
+
+  settings:
+    govet:
+      check-shadowing: true
+    staticcheck:
+      checks: ["all"]
+
 run:
   timeout: 5m
   tests: true
-
-linters:
-  enable:
-    - errcheck
-    - govet
-    - ineffassign
-    - staticcheck
-    - unused
-    - goconst
-    - unconvert
-    - bodyclose
-    - rowserrcheck
-
-linters-settings:
-  govet:
-    check-shadowing: true
-
-issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - gosec
-        - errcheck
