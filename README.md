@@ -136,8 +136,8 @@ You can create your own dataset following the Cultpedia format. Use the *cultped
 │   ├── manifest-questions.schema.json   # Questions manifest schema
 │   ├── question.example.json            # Question example
 │   ├── question.schema.json             # Question schema
-│   ├── countrie.example.json            # Country example
-│   └── countrie.schema.json             # Country schema
+│   ├── country.example.json             # Country example
+│   └── country.schema.json              # Country schema
 ```
 
 # Todo

@@ -1,0 +1,14 @@
+# Default owners for everything
+* @cedev-1
+
+# Dataset files
+datasets/ @cedev-1
+
+# Schema files
+schemas/ @cedev-1
+
+# CI/CD configuration
+.github/ @cedev-1
+
+# Go source code
+*.go @cedev-1

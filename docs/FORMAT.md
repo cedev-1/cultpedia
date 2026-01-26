@@ -117,7 +117,7 @@ The geography dataset is a **reference dataset** (not quiz questions) containing
 
 ## Country Structure
 
-Each country in `countries.ndjson` is a JSON object, follow this to see the schema [countrie.schema](../schemas/countrie.schema.json) or an example [countrie.example](../schemas/countrie.example.json).
+Each country in `countries.ndjson` is a JSON object, follow this to see the schema [country.schema](../schemas/country.schema.json) or an example [country.example](../schemas/country.example.json).
 
 ### Country Fields
 

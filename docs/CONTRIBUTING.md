@@ -65,9 +65,9 @@ If you want to use the pre-built binary releases, go to the [Releases page](http
 ### Quick Start
 
 > [!IMPORTANT]
-> Not edit the files questions.ndjson directly Use the interactive TUI tool described below!
+> Do not edit the questions.ndjson file directly. Use the interactive TUI tool described below!
 
-1. Sure you have do the **previous steps :**
+1. Make sure you have completed the **previous steps:**
       - **Fork**
       - **Clone**
       - **Build the tool**
@@ -98,7 +98,7 @@ When you have create or edit your question in `datasets/new-question.json`, use 
 
 3. **Push to your fork** and **create a Pull Request**.
 
-   Sure you have the last version of the main branch before push your changes.
+   Make sure you have the latest version of the main branch before pushing your changes.
 
    After adding the question using the TUI tool, follow these steps:
 
