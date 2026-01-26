@@ -15,8 +15,6 @@ linters:
           - gosec
 
   settings:
-    govet:
-      check-shadowing: true
     staticcheck:
       checks: ["all"]
 
