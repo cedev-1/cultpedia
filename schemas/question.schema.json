@@ -1,7 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["kind", "slug", "theme", "answers", "i18n", "qtype", "difficulty", "points", "estimated_seconds"],
+  "required": [
+    "kind",
+    "slug",
+    "theme",
+    "answers",
+    "i18n",
+    "qtype",
+    "difficulty",
+    "points",
+    "estimated_seconds"
+  ],
   "properties": {
     "kind": {
       "const": "question"
@@ -52,7 +62,9 @@
       "enum": ["beginner", "intermediate", "advanced"]
     },
     "estimated_seconds": {
-      "type": "number"
+      "type": "number",
+      "minimum": 5,
+      "maximum": 30
     },
     "points": {
       "type": "number"

@@ -1,28 +1,40 @@
 {
   "kind": "question",
   "version": "1.0",
-  "slug": "slug-example",
-  "theme": { "slug": "example-theme" },
-  "subthemes": [ { "slug": "example-subtheme-1" }, { "slug": "example-subtheme-2" } ],
-  "tags": [ { "slug": "example-tag-1" }, { "slug": "example-tag-2" } ],
+  "slug": "science-physics-marie-curie-first-nobel",
+  "theme": { "slug": "science" },
+  "subthemes": [ { "slug": "physics" }, { "slug": "nobel-prizes" } ],
+  "tags": [ { "slug": "women-in-science" }, { "slug": "20th-century" } ],
   "qtype": "single_choice",
-  "difficulty": "beginner",
+  "difficulty": "intermediate",
   "estimated_seconds": 20,
   "points": 1.0,
   "shuffle_answers": true,
   "i18n": {
-    "fr": { "title": "Exemple de question", "stem": "Exemple", "explanation": "Exemple" },
-    "en": { "title": "Example question", "stem": "Example", "explanation": "Example" },
-    "es": { "title": "Pregunta de ejemplo", "stem": "Ejemplo", "explanation": "Ejemplo" }
+    "fr": {
+      "title": "Première femme prix Nobel",
+      "stem": "Qui fut la première femme à recevoir un prix Nobel en 1903 ?",
+      "explanation": "Marie Curie a reçu le prix Nobel de physique en 1903, partagé avec son mari Pierre Curie et Henri Becquerel, pour leurs recherches sur la radioactivité."
+    },
+    "en": {
+      "title": "First woman Nobel Prize",
+      "stem": "Who was the first woman to receive a Nobel Prize in 1903?",
+      "explanation": "Marie Curie received the Nobel Prize in Physics in 1903, shared with her husband Pierre Curie and Henri Becquerel, for their research on radioactivity."
+    },
+    "es": {
+      "title": "Primera mujer premio Nobel",
+      "stem": "¿Quién fue la primera mujer en recibir un premio Nobel en 1903?",
+      "explanation": "Marie Curie recibió el Premio Nobel de Física en 1903, compartido con su esposo Pierre Curie y Henri Becquerel, por sus investigaciones sobre la radiactividad."
+    }
   },
   "answers": [
-    { "slug": "", "is_correct": true,  "i18n": { "fr": { "label": "" }, "en": { "label": "" }, "es": { "label": "" } } },
-    { "slug": "", "is_correct": false, "i18n": { "fr": { "label": "" }, "en": { "label": "" }, "es": { "label": "" } } },
-    { "slug": "", "is_correct": false, "i18n": { "fr": { "label": "" }, "en": { "label": "" }, "es": { "label": "" } } },
-    { "slug": "", "is_correct": false, "i18n": { "fr": { "label": "" }, "en": { "label": "" }, "es": { "label": "" } } }
+    { "slug": "marie-curie", "is_correct": true, "i18n": { "fr": { "label": "Marie Curie" }, "en": { "label": "Marie Curie" }, "es": { "label": "Marie Curie" } } },
+    { "slug": "ada-lovelace", "is_correct": false, "i18n": { "fr": { "label": "Ada Lovelace" }, "en": { "label": "Ada Lovelace" }, "es": { "label": "Ada Lovelace" } } },
+    { "slug": "rosalind-franklin", "is_correct": false, "i18n": { "fr": { "label": "Rosalind Franklin" }, "en": { "label": "Rosalind Franklin" }, "es": { "label": "Rosalind Franklin" } } },
+    { "slug": "emmy-noether", "is_correct": false, "i18n": { "fr": { "label": "Emmy Noether" }, "en": { "label": "Emmy Noether" }, "es": { "label": "Emmy Noether" } } }
   ],
   "sources": [
-    "https://example.com",
-    "https://example.org"
+    "https://www.nobelprize.org/prizes/physics/1903/marie-curie/biographical/",
+    "https://en.wikipedia.org/wiki/Marie_Curie"
   ]
 }

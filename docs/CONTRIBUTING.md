@@ -17,12 +17,12 @@ By participating, you agree to maintain a respectful and inclusive environment. 
 
 You have to **Fork the repository** on GitHub and clone your fork into your local machine.
 
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/cultpedia.git
-   cd cultpedia
-   ```
+```bash
+git clone https://github.com/YOUR_USERNAME/cultpedia.git
+cd cultpedia
+```
 
-   Replace `YOUR_USERNAME` with your GitHub username.
+Replace `YOUR_USERNAME` with your GitHub username.
 
 ### Build the cultpedia tool
 
@@ -40,105 +40,193 @@ If you want to use the pre-built binary releases, go to the [Releases page](http
 
 ### Manual Build
 
-   **Linux/macOS:**
-   ```bash
-   ./build.sh
-   ```
+**Linux/macOS:**
+```bash
+./build.sh
+```
 
-   **Windows:**
-   ```bash
-   build.bat
-   ```
+**Windows:**
+```bash
+build.bat
+```
 
-   **Manual build:**
-   ```bash
-   go build -o cultpedia ./cmd
-   ```
+**Manual build:**
+```bash
+go build -o cultpedia ./cmd
+```
 
-   > [!TIP]
-   > If you use **Nix**, you can set de development environment (binary will be built automatically)
+> [!TIP]
+> If you use **Nix**, you can set up the development environment (binary will be built automatically)
 
 **Familiarize yourself** with the [data format](FORMAT.md).
 
 ## Contributing Questions
 
-### Quick Start
-
 > [!IMPORTANT]
 > Do not edit the questions.ndjson file directly. Use the interactive TUI tool described below!
 
-1. Make sure you have completed the **previous steps:**
-      - **Fork**
-      - **Clone**
-      - **Build the tool**
+### Available Themes
 
-2. **Choose your question type and edit the appropriate template file:**
-   
+You can use one of these existing themes for your question:
+
+| Theme | Description |
+|-------|-------------|
+| `science` | Physics, chemistry, biology, astronomy, inventions |
+| `history` | Ancient history, modern history, wars, emperors, revolutions |
+| `geography` | Countries, capitals, landmarks, continents |
+| `sports` | Football, motorsport, Formula 1, Olympics |
+| `gaming` | Video games, studios, consoles |
+
+You can also create new **theme**, new **subthemes** and **tags** as needed. They will be automatically added to the dataset when your PR is merged.
+
+### Question Content Guidelines
+
+#### i18n Fields (title, stem, explanation)
+
+Each question requires translations in **French (fr)**, **English (en)**, and **Spanish (es)**:
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `title` | Short descriptive title | "First woman Nobel Prize" |
+| `stem` | The actual question (min. 10 characters) | "Who was the first woman to win a Nobel Prize in 1903?" |
+| `explanation` | Educational explanation of the answer (min. 20 characters) | "Marie Curie won the Nobel Prize in Physics in 1903, shared with her husband Pierre Curie and Henri Becquerel, for their research on radioactivity." |
+
+#### Difficulty Levels
+
+- beginner
+- intermediate
+- advanced
+- pro
+
+#### Validation Rules
+
+Your question must respect these constraints:
+
+| Field | Constraint |
+|-------|------------|
+| `slug` | Lowercase letters, numbers, and hyphens only. No leading/trailing hyphens. Must be unique. |
+| `points` | Between 0.5 and 5.0 |
+| `estimated_seconds` | Between 5 and 30 |
+| `answers` | Exactly 4 for `single_choice`, exactly 2 for `true_false` |
+| `sources` | At least one URL required |
+
+#### Sources
+
+Provide at least one reliable source URL (Wikipedia, official websites, academic sources, reputable news outlets). This allows reviewers to verify the accuracy of your question.
+
+### Step-by-Step Guide
+
+1. **Prerequisites**: Make sure you have completed Fork, Clone, and Build steps.
+
+2. **Choose your question type and edit the template file:**
    - **Standard questions (4 choices):** Edit [`datasets/new-question.json`](../datasets/new-question.json)
    - **True/False questions (2 choices):** Edit [`datasets/new-question-true-false.json`](../datasets/new-question-true-false.json)
-   
-   Guidelines:
-   - Create your question in the chosen template file
-   - Follow this [guidelines](../docs/FORMAT.md) for question content
-   - Each line must be valid JSON (JSON format)
-   - Use [question.example.json](../schemas/question.example.json) as a template
 
-3. Run the TUI tool to validate and add your question, follow **Validate new question** and **Add question to dataset** steps.
+3. **Validate locally** (optional but recommended):
+   ```bash
+   ./cultpedia validate
+   ```
 
-![Interactive Tool](./cultpedia.gif)
+4. **Run the TUI tool** to add your question:
+   ```bash
+   ./cultpedia
+   ```
+   Follow **Validate new question** and **Add question to dataset** steps.
 
-### Add a question
+   ![Interactive Tool](./cultpedia.gif)
 
-When you have create or edit your question in `datasets/new-question.json`, use the interactive TUI tool to add it to the main dataset.
-
-![add_question](./add_question.png)
+   ![add_question](./add_question.png)
 
 > [!WARNING]
-> Dont edit **.ndjson** and **manifest.json** files directly.
+> Don't edit **.ndjson** and **manifest.json** files directly.
 
-3. **Push to your fork** and **create a Pull Request**.
+5. **Create a branch and push to your fork:**
 
-   Make sure you have the latest version of the main branch before pushing your changes.
+   ```bash
+   # Create a new branch
+   git checkout -b add-question-{slug}
 
-   After adding the question using the TUI tool, follow these steps:
+   # Add only the questions file
+   git add datasets/general-knowledge/questions.ndjson
 
-   1. Create a new branch for your contribution:
-      ```bash
-      git checkout -b add-question-{slug}
-      ```
-      (Replace `{slug}` with the actual slug of your question (or a concise slug version), e.g., `add-question-science-physics-nobel-prize-first-woman-1903`)
+   # Commit your changes
+   git commit -m "feat: add {slug}"
 
-   2. Add the updated dataset file:
-      ```bash
-      git add datasets/general-knowledge/questions.ndjson
-      ```
+   # Push to your fork
+   git push origin add-question-{slug}
+   ```
 
-   3. Commit your changes:
-      ```bash
-      git commit -m "feat: add {slug}"
-      ```
-      (Replace `{slug}` with the actual slug of your question or a concise slug version)
+   Replace `{slug}` with your question's slug (e.g., `add-question-science-physics-marie-curie-nobel`).
 
-   4. Push to your fork:
-      ```bash
-      git push origin add-question-{slug}
-      ```
+6. **Create a Pull Request** on GitHub from your branch to the main repository.
 
-   5. Create a Pull Request on GitHub from your branch to the main repository.
-
-4. **CI will automatically**:
+7. **CI will automatically**:
    - ✓ Validate all questions
    - ✓ Check for duplicates
    - ✓ Verify all translations
    - ✓ Reject if unwanted files were modified
 
-5. Reviewers will check your PR, may request changes, and finally merge it.
+8. Reviewers will check your PR, may request changes, and finally merge it.
+
+### Troubleshooting
+
+| Error | Solution |
+|-------|----------|
+| "slug must be lowercase with hyphens only" | Use only `a-z`, `0-9`, and `-`. No spaces, underscores, or uppercase. |
+| "must have exactly 4 answers" | Add or remove answers to have exactly 4 (or 2 for true/false). |
+| "missing X translation" | Add the missing language (fr, en, or es) to i18n fields. |
+| "stem too short" | Write a more detailed question (minimum 10 characters). |
+| "explanation too short" | Provide a more detailed explanation (minimum 20 characters). |
+| "at least one source URL is required" | Add a source URL to verify your question's accuracy. |
 
 ### Important Rules
 
 - **Only modify** `datasets/general-knowledge/questions.ndjson`
 - **Do not commit** manifest.json, themes.ndjson, subthemes.ndjson, or tags.ndjson
 - These files are updated automatically by the CI
+
+## Contributing Code
+
+### Setup
+
+1. **Fork and clone** the repository (see [Getting Started](#getting-started))
+
+2. **Install Go** (version 1.24 or later)
+
+3. **Build the project:**
+   ```bash
+   go build -o cultpedia ./cmd
+   ```
+
+4. **Run tests:**
+   ```bash
+   go test ./... -v
+   ```
+
+5. **Run linter:**
+   ```bash
+   golangci-lint run --timeout=5m
+   ```
+
+### Project Structure
+
+```
+cmd/main.go           # CLI entry point
+internal/
+├── actions/          # Domain logic (question management, API server)
+├── checks/           # Validation pipeline
+├── models/           # Data structures
+├── ui/               # Bubble Tea TUI components
+└── utils/            # File I/O helpers
+```
+
+### Pull Request Process
+
+1. Create a feature branch from `main`
+2. Make your changes
+3. Ensure tests pass: `go test ./... -v`
+4. Ensure linter passes: `golangci-lint run`
+5. Submit a PR with a clear description of changes
 
 ## Thank You!
 
@@ -148,4 +236,4 @@ We appreciate your contributions to Cultpedia! Your efforts help create a richer
 
 - [Data Format Guide](FORMAT.md)
 - [JSON Schema](../schemas/question.schema.json)
-- [Example Question](../datasets/new-question.json)
+- [Question Template](../datasets/new-question.json)

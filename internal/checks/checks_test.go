@@ -169,6 +169,15 @@ func TestValidateQuestion(t *testing.T) {
 		}
 	})
 
+	t.Run("estimated seconds too high", func(t *testing.T) {
+		q := createValidQuestion()
+		q.EstimatedSeconds = 31
+		err := validateQuestion(q)
+		if err == nil {
+			t.Error("validateQuestion() should return error for estimated_seconds above 30")
+		}
+	})
+
 	t.Run("no sources", func(t *testing.T) {
 		q := createValidQuestion()
 		q.Sources = []string{}
