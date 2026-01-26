@@ -1,6 +1,4 @@
-# .golangci.yml - Simple configuration
-version: 2
-
+version: "2"
 run:
   timeout: 5m
   tests: true
@@ -12,7 +10,6 @@ linters:
     - ineffassign
     - staticcheck
     - unused
-    
     - goconst
     - unconvert
     - bodyclose
@@ -23,11 +20,8 @@ linters-settings:
     check-shadowing: true
 
 issues:
-  exclude-rules:
+  exclude:
     - path: _test\.go
       linters:
         - gosec
         - errcheck
-
-output:
-  format: colored-line-number
