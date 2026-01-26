@@ -70,7 +70,7 @@ func loadManifests() error {
 	if err != nil {
 		return err
 	}
-	defer geoFile.Close()
+	defer func() { _ = geoFile.Close() }()
 
 	var geoManifest struct {
 		Version   string `json:"version"`
@@ -88,7 +88,7 @@ func loadManifests() error {
 	if err != nil {
 		return err
 	}
-	defer qFile.Close()
+	defer func() { _ = qFile.Close() }()
 
 	var qManifest struct {
 		Version   string `json:"version"`
@@ -110,7 +110,7 @@ func loadQuestions() ([]models.Question, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	var questions []models.Question
 	scanner := bufio.NewScanner(file)
@@ -130,7 +130,7 @@ func loadCountries() ([]models.Country, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	var countries []models.Country
 	scanner := bufio.NewScanner(file)
@@ -150,7 +150,7 @@ func loadRegions() ([]models.Region, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	var regions []models.Region
 	scanner := bufio.NewScanner(file)
@@ -170,7 +170,7 @@ func loadContinents() ([]models.Continent, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	var continents []models.Continent
 	scanner := bufio.NewScanner(file)
@@ -238,13 +238,13 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	
-	json.NewEncoder(w).Encode(response)
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 func handleQuestions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
 		"data":  apiData.Questions,
 		"count": len(apiData.Questions),
 	})
@@ -253,7 +253,7 @@ func handleQuestions(w http.ResponseWriter, r *http.Request) {
 func handleCountries(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
 		"data":  apiData.Countries,
 		"count": len(apiData.Countries),
 	})
@@ -262,7 +262,7 @@ func handleCountries(w http.ResponseWriter, r *http.Request) {
 func handleRegions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
 		"data":  apiData.Regions,
 		"count": len(apiData.Regions),
 	})
@@ -271,7 +271,7 @@ func handleRegions(w http.ResponseWriter, r *http.Request) {
 func handleContinents(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
 		"data":  apiData.Continents,
 		"count": len(apiData.Continents),
 	})

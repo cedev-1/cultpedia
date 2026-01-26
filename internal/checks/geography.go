@@ -109,10 +109,6 @@ func validateCountry(c models.Country) error {
 		if c.OfficialName[lang] == "" {
 			return fmt.Errorf("official_name.%s is required", lang)
 		}
-		if c.Capital[lang] == "" {
-			// Some countries don't have capitals, so this is a warning not an error
-			// return fmt.Errorf("capital.%s is required", lang)
-		}
 	}
 
 	if c.Continent == "" {
@@ -300,10 +296,6 @@ func CheckGeographyTranslations() string {
 			}
 			if c.OfficialName[lang] == "" {
 				missing = append(missing, fmt.Sprintf("Country line %d (slug: %s): missing %s translation for 'official_name'", i+1, c.Slug, lang))
-			}
-			if c.Capital[lang] == "" {
-				// Warning only, some countries don't have capitals
-				// missing = append(missing, fmt.Sprintf("Country line %d (slug: %s): missing %s translation for 'capital'", i+1, c.Slug, lang))
 			}
 		}
 	}

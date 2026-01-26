@@ -17,6 +17,10 @@ import (
 const (
 	keyCtrlC = "ctrl+c"
 	keyEnter = "enter"
+	keyEsc   = "esc"
+
+	qtypeSingleChoice = "single_choice"
+	qtypeTrueFalse    = "true_false"
 )
 
 var titleStyle = lipgloss.NewStyle().
@@ -186,7 +190,7 @@ func (m previewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.languageIndex < len(m.languages)-1 {
 				m.languageIndex++
 			}
-		case "enter", "esc":
+		case keyEnter, keyEsc:
 			return newMainMenuModel(m.version, m.questionType, ""), nil
 		}
 	}
@@ -285,7 +289,7 @@ func (m helpModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "q", keyCtrlC:
 			return m, tea.Quit
-		case "enter", "esc":
+		case keyEnter, keyEsc:
 			return newMainMenuModel(m.version, m.questionType, ""), nil
 		}
 	}
@@ -328,13 +332,13 @@ func (m versionCheckModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case versionCheckMsg:
 		if msg.err != nil || msg.remoteVersion == "" || msg.remoteVersion == msg.version {
-			return newMainMenuModel(msg.version, "single_choice", ""), nil
+			return newMainMenuModel(msg.version, qtypeSingleChoice, ""), nil
 		} else {
 			message := fmt.Sprintf("Your local dataset version (%s) is outdated.\nThe latest version on GitHub is %s.\n\nPlease run 'git pull' to update your local repository before proceeding.\n\nPress Enter to continue anyway (not recommended).", msg.version, msg.remoteVersion)
 			return warningModel{
 				message:      message,
 				version:      msg.version,
-				questionType: "single_choice",
+				questionType: qtypeSingleChoice,
 			}, nil
 		}
 	}
@@ -349,7 +353,7 @@ func (m warningModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "q", "esc", keyCtrlC:
+		case "q", keyEsc, keyCtrlC:
 			return m, tea.Quit
 		case keyEnter:
 			return newMainMenuModel(m.version, m.questionType, ""), nil
@@ -415,11 +419,11 @@ func (m mainMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					}, nil
 				}
 			case 3:
-				if m.questionType == "single_choice" {
-					m.questionType = "true_false"
+				if m.questionType == qtypeSingleChoice {
+					m.questionType = qtypeTrueFalse
 					m.message = "Switched to True/False mode"
 				} else {
-					m.questionType = "single_choice"
+					m.questionType = qtypeSingleChoice
 					m.message = "Switched to Single Choice mode"
 				}
 			}
@@ -437,9 +441,9 @@ func (m mainMenuModel) View() string {
 	versionStr := versionStyle.Render(fmt.Sprintf("Database version: %s", m.version))
 	s += versionStr + "\n"
 
-	modeDisplay := "single_choice"
-	if m.questionType == "true_false" {
-		modeDisplay = "true_false"
+	modeDisplay := qtypeSingleChoice
+	if m.questionType == qtypeTrueFalse {
+		modeDisplay = qtypeTrueFalse
 	}
 	s += infoStyle.Render(fmt.Sprintf("Question mode: %s", modeDisplay)) + "\n\n"
 

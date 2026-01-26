@@ -6,6 +6,11 @@ import (
 	"cultpedia/internal/models"
 )
 
+const (
+	qtypeSingleChoice = "single_choice"
+	qtypeTrueFalse    = "true_false"
+)
+
 func TestIsValidSlug(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -64,7 +69,7 @@ func createValidQuestion() models.Question {
 		Kind:             "question",
 		Slug:             "test-question-slug",
 		Theme:            models.Theme{Slug: "history"},
-		Qtype:            "single_choice",
+		Qtype:            qtypeSingleChoice,
 		Difficulty:       "beginner",
 		Points:           1.0,
 		EstimatedSeconds: 20,
@@ -216,7 +221,7 @@ func TestValidateQuestion(t *testing.T) {
 func TestValidateTrueFalseQuestion(t *testing.T) {
 	t.Run("valid true_false question", func(t *testing.T) {
 		q := createValidQuestion()
-		q.Qtype = "true_false"
+		q.Qtype = qtypeTrueFalse
 		q.Answers = []models.Answer{
 			{Slug: "true", IsCorrect: true, I18n: map[string]models.Label{"fr": {Label: "Vrai"}, "en": {Label: "True"}, "es": {Label: "Verdadero"}}},
 			{Slug: "false", IsCorrect: false, I18n: map[string]models.Label{"fr": {Label: "Faux"}, "en": {Label: "False"}, "es": {Label: "Falso"}}},
@@ -229,7 +234,7 @@ func TestValidateTrueFalseQuestion(t *testing.T) {
 
 	t.Run("true_false with wrong slugs", func(t *testing.T) {
 		q := createValidQuestion()
-		q.Qtype = "true_false"
+		q.Qtype = qtypeTrueFalse
 		q.Answers = []models.Answer{
 			{Slug: "yes", IsCorrect: true, I18n: map[string]models.Label{"fr": {Label: "Oui"}, "en": {Label: "Yes"}, "es": {Label: "Si"}}},
 			{Slug: "no", IsCorrect: false, I18n: map[string]models.Label{"fr": {Label: "Non"}, "en": {Label: "No"}, "es": {Label: "No"}}},
@@ -242,7 +247,7 @@ func TestValidateTrueFalseQuestion(t *testing.T) {
 
 	t.Run("true_false with wrong answer count", func(t *testing.T) {
 		q := createValidQuestion()
-		q.Qtype = "true_false"
+		q.Qtype = qtypeTrueFalse
 		err := validateQuestion(q)
 		if err == nil {
 			t.Error("validateQuestion() should return error for true_false with != 2 answers")

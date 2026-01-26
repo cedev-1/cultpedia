@@ -57,7 +57,7 @@ func SaveQuestion(q models.Question) error {
 		if err != nil {
 			return fmt.Errorf("error opening file for check: %v", err)
 		}
-		defer f.Close()
+		defer func() { _ = f.Close() }()
 		stat, err := f.Stat()
 		if err != nil {
 			return fmt.Errorf("error getting file stat: %v", err)
